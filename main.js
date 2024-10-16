@@ -11,33 +11,14 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
+// -------------------------------- Scene --------------------------------
+
 const clock = new THREE.Clock();
 
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x88ccee);
-// scene.fog = new THREE.Fog(0x88ccee, 0, 50);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
-
-// const fillLight1 = new THREE.HemisphereLight(0x8dc1de, 0x00668d, 1.5);
-// fillLight1.position.set(2, 1, 1);
-// scene.add(fillLight1);
-
-// const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
-// directionalLight.position.set(- 5, 25, - 1);
-// directionalLight.castShadow = true;
-// directionalLight.shadow.camera.near = 0.01;
-// directionalLight.shadow.camera.far = 500;
-// directionalLight.shadow.camera.right = 30;
-// directionalLight.shadow.camera.left = - 30;
-// directionalLight.shadow.camera.top = 30;
-// directionalLight.shadow.camera.bottom = - 30;
-// directionalLight.shadow.mapSize.width = 1024;
-// directionalLight.shadow.mapSize.height = 1024;
-// directionalLight.shadow.radius = 4;
-// directionalLight.shadow.bias = - 0.00006;
-// scene.add(directionalLight);
 
 const container = document.getElementById('container');
 
@@ -50,12 +31,12 @@ renderer.shadowMap.type = THREE.VSMShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 container.appendChild(renderer.domElement);
 
-const stats = new Stats();
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.top = '0px';
-container.appendChild(stats.domElement);
+// const stats = new Stats();
+// stats.domElement.style.position = 'absolute';
+// stats.domElement.style.top = '0px';
+// container.appendChild(stats.domElement);
 
-const GRAVITY = 30; // default: 30
+const GRAVITY = 50; // default: 30
 
 const STEPS_PER_FRAME = 5;
 
@@ -63,12 +44,67 @@ const worldOctree = new Octree();
 
 const playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
 
-const playerLight = new THREE.PointLight(0xffffff, 100);
-playerLight.position.set(0, 1, 0); // Adjust the light position relative to the player
+const playerLight = new THREE.PointLight(0xffffff, 0.5);
+playerLight.position.set(0, 10, 0); // Adjust the light position relative to the player
+
+const neonLight = new THREE.PointLight(0xffffff, 20)
+neonLight.position.set(-8, 2.4, -60)
+
+scene.add(neonLight)
 scene.add(playerLight)
 
 const playerVelocity = new THREE.Vector3();
 const playerDirection = new THREE.Vector3();
+
+// -------------------------------- GUI --------------------------------
+
+const hudText = document.getElementById('hud-text');
+
+function showHUD() {
+  hudText.style.visibility = "visible";
+}
+
+function hideHUD() {
+  hudText.style.visibility = "hidden";
+}
+
+const interactText = document.getElementById('interact-text');
+
+function showInteractText() {
+  interactText.style.visibility = "visible";
+}
+
+function hideInteractText() {
+  interactText.style.visibility = "hidden";
+}
+
+// -------------------------------- trigger zones -------------------------------
+
+const corpseTrigger = new THREE.Box3(
+  // Min corner (xMin, yMin, zMin)
+  new THREE.Vector3(-31, 0, -28),
+  // Max corner (xMax, yMax, zMax)
+  new THREE.Vector3(-29, 2, -24)
+);
+
+// Flag to track if player is inside the trigger
+let playerInTriggerZone = false;
+
+// EXAMPLE OF A MESH FOR DEBUGGING
+
+// const corpseTriggerSize = new THREE.Vector3();
+// corpseTrigger.getSize(corpseTriggerSize); 
+
+// const corpseTriggerMesh = new THREE.Mesh(
+//   new THREE.BoxGeometry(corpseTriggerSize.x, corpseTriggerSize.y, corpseTriggerSize.z), // Size of the box
+//   new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true }) // Red wireframe material for visualization
+// );
+
+// corpseTriggerMesh.position.copy(corpseTrigger.getCenter(new THREE.Vector3()));
+
+// scene.add(corpseTriggerMesh);
+
+// -------------------------------- functions --------------------------------
 
 let playerOnFloor = false;
 
@@ -89,8 +125,6 @@ document.addEventListener('keyup', (event) => {
 container.addEventListener('mousedown', () => {
 
   document.body.requestPointerLock();
-
-  mouseTime = performance.now();
 
 });
 
@@ -227,11 +261,44 @@ function controls(deltaTime) {
 
   }
 
+  // Objects interaction
+  if(keyStates['KeyE']) {
+
+    if (playerInTriggerZone) {
+      showHUD();
+    }
+    
+  }
+
+}
+
+function checkTriggers() {
+  const playerBox = new THREE.Box3().setFromPoints([
+    playerCollider.start,
+    playerCollider.end
+  ]);
+
+  if (playerBox.intersectsBox(corpseTrigger)) {
+    if (!playerInTriggerZone) {
+      console.log("Entered the trigger zone");
+      showInteractText();
+      
+      playerInTriggerZone = true;
+    }
+  } else {
+    if (playerInTriggerZone) {
+      console.log("Exited the trigger zone");
+      hideInteractText();
+      hideHUD();
+      
+      playerInTriggerZone = false;
+    }
+  }
 }
 
 const loader = new GLTFLoader().setPath('/assets/models/');
 
-loader.load('creepy.glb', (gltf) => {
+loader.load('scene.glb', (gltf) => {
 
   scene.add(gltf.scene);
 
@@ -254,17 +321,17 @@ loader.load('creepy.glb', (gltf) => {
 
   });
 
-  const helper = new OctreeHelper(worldOctree);
-  helper.visible = false;
-  scene.add(helper);
+  // const helper = new OctreeHelper(worldOctree);
+  // helper.visible = false;
+  // scene.add(helper);
 
-  const gui = new GUI({ width: 200 });
-  gui.add({ debug: false }, 'debug')
-    .onChange(function (value) {
+  // const gui = new GUI({ width: 200 });
+  // gui.add({ debug: false }, 'debug')
+  //   .onChange(function (value) {
 
-      helper.visible = value;
+  //     helper.visible = value;
 
-    });
+  //   });
 
 });
 
@@ -283,6 +350,23 @@ function teleportPlayerIfOob() {
 
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function flickerNeonLight() {
+  if (neonLight.visible) {
+    if (getRandomInt(1600) == 1) {
+      neonLight.visible = false;
+    }
+  }
+  if (!neonLight.visible) {
+    if (getRandomInt(200) == 1) {
+      neonLight.visible = true;
+    }
+  }
+}
+
 
 function animate() {
 
@@ -299,10 +383,13 @@ function animate() {
 
     teleportPlayerIfOob();
 
+    flickerNeonLight();
+
+    checkTriggers();
   }
 
   renderer.render(scene, camera);
 
-  stats.update();
+  // stats.update();
 
 }
