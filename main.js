@@ -56,6 +56,7 @@ scene.add(playerLight)
 const playerVelocity = new THREE.Vector3();
 const playerDirection = new THREE.Vector3();
 
+
 // -------------------------------- GUI --------------------------------
 
 const hudText = document.getElementById('hud-text');
@@ -86,6 +87,13 @@ const corpseTrigger = new THREE.Box3(
   // Max corner (xMax, yMax, zMax)
   new THREE.Vector3(-29, 2, -24)
 );
+
+// Door trigger
+const doorTrigger = new THREE.Box3(
+  new THREE.Vector3(-7.55, 0.1, -5.5),
+  new THREE.Vector3(-7.45, 3.9, 0.5));
+// Current room state
+let currentRoom = 'creepy';
 
 // Flag to track if player is inside the trigger
 let playerInTriggerZone = false;
@@ -199,6 +207,11 @@ function updatePlayer(deltaTime) {
   camera.position.copy(playerCollider.end);
 
   playerLight.position.copy(playerCollider.end)
+
+  // Check for door trigger collision
+  if (doorTrigger.containsPoint(camera.position) && currentRoom === 'creepy') {
+    loadNewRoom();
+  }
 }
 
 function getForwardVector() {
@@ -298,28 +311,29 @@ function checkTriggers() {
 
 const loader = new GLTFLoader().setPath('/assets/models/');
 
-loader.load('scene.glb', (gltf) => {
+function loadRoom(roomFile) {
+  loader.load(roomFile, (gltf) => {
 
-  scene.add(gltf.scene);
+    scene.clear();  // Clear the current scene
+    scene.add(gltf.scene);
 
-  worldOctree.fromGraphNode(gltf.scene);
+    worldOctree.fromGraphNode(gltf.scene);
 
-  gltf.scene.traverse(child => {
+    gltf.scene.traverse(child => {
 
-    if (child.isMesh) {
+      if (child.isMesh) {
 
-      child.castShadow = true;
-      child.receiveShadow = true;
+        child.castShadow = true;
+        child.receiveShadow = true;
 
-      if (child.material.map) {
+        if (child.material.map) {
 
-        child.material.map.anisotropy = 4;
+          child.material.map.anisotropy = 4;
+
+        }
 
       }
-
-    }
-
-  });
+    });
 
   // const helper = new OctreeHelper(worldOctree);
   // helper.visible = false;
@@ -332,8 +346,31 @@ loader.load('scene.glb', (gltf) => {
   //     helper.visible = value;
 
   //   });
+  // Reset player position
+  if (roomFile == 'scene.glb') {
+    playerCollider.start.set(0, 0.35, 0);
+    playerCollider.end.set(0, 1, 0);
+    camera.position.copy(playerCollider.end);
+    camera.rotation.set(0, 0, 0);
+  }
+  else if (roomFile == 'reception.glb') {
+    playerCollider.start.set(0, 0.85, -4.5);
+    playerCollider.end.set(0, 1.5, -4.5);
+    camera.position.copy(playerCollider.end);
+    camera.rotation.set(0, 0, 0);
+    playerLight.position.copy(playerCollider.end)
+  }
 
-});
+  });
+}
+
+function loadNewRoom() {
+  currentRoom = 'reception';
+  loadRoom('reception.glb');
+}
+
+// Initial room load
+loadRoom('scene.glb');
 
 function teleportPlayerIfOob() {
 
