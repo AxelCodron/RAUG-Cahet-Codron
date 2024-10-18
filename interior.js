@@ -1,0 +1,1 @@
+// Functions for the interior scenes of the game.
