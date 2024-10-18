@@ -91,7 +91,9 @@ const corpseTrigger = new THREE.Box3(
 // Door trigger
 const doorTrigger = new THREE.Box3(
   new THREE.Vector3(-7.55, 0.1, -5.5),
-  new THREE.Vector3(-7.45, 3.9, 0.5));
+  new THREE.Vector3(-7.45, 3.9, 0.5)
+);
+
 // Current room state
 let currentRoom = 'creepy';
 
@@ -314,7 +316,7 @@ const loader = new GLTFLoader().setPath('/assets/models/');
 function loadRoom(roomFile) {
   loader.load(roomFile, (gltf) => {
 
-    scene.clear();  // Clear the current scene
+    // scene.clear();  // Clear the current scene
     scene.add(gltf.scene);
 
     worldOctree.fromGraphNode(gltf.scene);
@@ -346,6 +348,7 @@ function loadRoom(roomFile) {
   //     helper.visible = value;
 
   //   });
+
   // Reset player position
   if (roomFile == 'scene.glb') {
     playerCollider.start.set(0, 0.35, 0);
