@@ -5,8 +5,8 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { flickerNeonLight, loadNeonLight, ExteriorTriggers, showHUD } from './exterior.js';
-import { InteriorTriggers } from './interior.js';
+import { flickerNeonLight, loadNeonLight, ExteriorTriggers, showHUD } from './scenes/exterior.js';
+import { InteriorTriggers } from './scenes/reception.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -44,7 +44,7 @@ let playerOnFloor = false;
 const keyStates = {};
 
 // Current room state
-let currentRoom = 'hospital-exterior';
+let currentRoom = 'exterior';
 
 // -------------------------------- Event listeners --------------------------------
 
@@ -168,7 +168,7 @@ function checkTriggers() {
     playerCollider.end
   ]);
 
-  if (currentRoom === 'hospital-exterior') {
+  if (currentRoom === 'exterior') {
     ExteriorTriggers(playerBox);
   }
   if (currentRoom === 'reception') {
@@ -199,7 +199,7 @@ function loadRoom(roomFile) {
     });
 
     // Reset player position
-    if (roomFile == 'hospital-exterior.glb') {
+    if (roomFile == 'exterior.glb') {
       playerCollider.start.set(0, 0.35, 0);
       playerCollider.end.set(0, 1, 0);
       camera.position.copy(playerCollider.end);
@@ -242,7 +242,7 @@ function teleportPlayerIfOob() {
 const loader = new GLTFLoader().setPath('/assets/models/');
 
 // Initial room load
-loadRoom('hospital-exterior.glb');
+loadRoom('exterior.glb');
 
 // -------------------------------- Main loop --------------------------------
 

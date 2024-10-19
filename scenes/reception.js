@@ -2,7 +2,7 @@
 
 import * as THREE from 'three';
 
-import { loadNewRoom } from './main';
+import { loadNewRoom } from '../main';
 
 // ------------------- Trigger Function -------------------
 
