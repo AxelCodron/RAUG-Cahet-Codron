@@ -5,8 +5,8 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { flickerNeonLight, loadNeonLight } from './exterior.js';
-// import { myFunction } from './interior.js';
+import { flickerNeonLight, loadNeonLight, ExteriorTriggers, showHUD } from './exterior.js';
+import { InteriorTriggers } from './interior.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -45,46 +45,6 @@ const keyStates = {};
 
 // Current room state
 let currentRoom = 'hospital-exterior';
-
-// -------------------------------- GUI --------------------------------
-
-const hudText = document.getElementById('hud-text');
-
-function showHUD() {
-  hudText.style.visibility = "visible";
-}
-
-function hideHUD() {
-  hudText.style.visibility = "hidden";
-}
-
-const interactText = document.getElementById('interact-text');
-
-function showInteractText() {
-  interactText.style.visibility = "visible";
-}
-
-function hideInteractText() {
-  interactText.style.visibility = "hidden";
-}
-
-// -------------------------------- Trigger zones -------------------------------
-
-// Flag to track if player is inside the trigger
-let playerInTriggerZone = false;
-
-const corpseTrigger = new THREE.Box3(
-  // Min corner (xMin, yMin, zMin)
-  new THREE.Vector3(-31, 0, -28),
-  // Max corner (xMax, yMax, zMax)
-  new THREE.Vector3(-29, 2, -24)
-);
-
-// Door trigger
-const doorTrigger = new THREE.Box3(
-  new THREE.Vector3(-7.55, 0.1, -5.5),
-  new THREE.Vector3(-7.45, 3.9, 0.5)
-);
 
 // -------------------------------- Event listeners --------------------------------
 
@@ -153,11 +113,6 @@ function updatePlayer(deltaTime) {
 
   camera.position.copy(playerCollider.end);
   playerLight.position.copy(playerCollider.end);
-
-  // Check for door trigger collision
-  if (doorTrigger.containsPoint(camera.position) && currentRoom === 'hospital-exterior') {
-    loadNewRoom("reception");
-  }
 }
 
 function getForwardVector() {
@@ -203,9 +158,7 @@ function controls(deltaTime) {
 
   // Objects interaction
   if (keyStates['KeyE']) {
-    if (playerInTriggerZone) {
-      showHUD();
-    }
+    showHUD();
   }
 }
 
@@ -215,21 +168,11 @@ function checkTriggers() {
     playerCollider.end
   ]);
 
-  if (playerBox.intersectsBox(corpseTrigger)) {
-    if (!playerInTriggerZone) {
-      console.log("Entered the trigger zone");
-      showInteractText();
-      playerInTriggerZone = true;
-    }
+  if (currentRoom === 'hospital-exterior') {
+    ExteriorTriggers(playerBox);
   }
-  
-  else {
-    if (playerInTriggerZone) {
-      console.log("Exited the trigger zone");
-      hideInteractText();
-      hideHUD();
-      playerInTriggerZone = false;
-    }
+  if (currentRoom === 'reception') {
+    InteriorTriggers(playerBox);
   }
 }
 
@@ -318,3 +261,6 @@ function animate() {
   }
   renderer.render(scene, camera);
 }
+
+// exports
+export { loadNewRoom }

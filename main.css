@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Valium';
-  src: url('/assets/fonts/valium.ttf') format('truetype'); /* Adjust the path */
+  src: url('/assets/fonts/valium.ttf') format('truetype');
 }
 
 html,
