@@ -5,7 +5,8 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { flickerNeonLight, loadNeonLight, ExteriorTriggers, showHUD } from './scenes/exterior.js';
+import { loadInfected, fromIdleToWalk, fromWalkToRun, infectedLoop } from './entities/infected.js';
+import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { InteriorTriggers } from './scenes/reception.js';
 
 // -------------------------------- Base setup --------------------------------
@@ -30,7 +31,7 @@ container.appendChild(renderer.domElement);
 
 const GRAVITY = 80; // default: 30
 
-const STEPS_PER_FRAME = 5;
+const STEPS_PER_FRAME = 1;
 
 const worldOctree = new Octree();
 
@@ -160,6 +161,14 @@ function controls(deltaTime) {
   if (keyStates['KeyE']) {
     showHUD();
   }
+
+  // test
+  if (keyStates['KeyR']) {
+    fromIdleToWalk();
+  }
+  if (keyStates['KeyT']) {
+    fromWalkToRun();
+  }
 }
 
 function checkTriggers() {
@@ -169,7 +178,7 @@ function checkTriggers() {
   ]);
 
   if (currentRoom === 'exterior') {
-    ExteriorTriggers(playerBox);
+    exteriorTriggers(playerBox);
   }
   if (currentRoom === 'reception') {
     InteriorTriggers(playerBox);
@@ -207,6 +216,7 @@ function loadRoom(roomFile) {
 
       // Call the functions from exterior.js
       loadNeonLight(scene);
+      loadInfected('Soldier.glb', loader, scene);
     }
     else if (roomFile == 'reception.glb') {
       playerCollider.start.set(0, 0.85, -4.5);
@@ -248,6 +258,8 @@ loadRoom('exterior.glb');
 
 function animate() {
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
+
+  infectedLoop(deltaTime);
 
   // we look for collisions in substeps to mitigate the risk of
   // an object traversing another too quickly for detection.

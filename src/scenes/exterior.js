@@ -47,7 +47,7 @@ function hideInteractText() {
 
 // ------------------- Trigger Function -------------------
 
-function ExteriorTriggers(playerBox) {
+function exteriorTriggers(playerBox) {
     // Check for corpse trigger collision
     if (playerBox.intersectsBox(corpseTrigger)) {
         if (!playerInCorpseTriggerZone) {
@@ -71,7 +71,7 @@ function ExteriorTriggers(playerBox) {
     }
 }
 
-// ------------------- Functions -------------------
+// ------------------- Neon Light -------------------
 
 const neonLight = new THREE.PointLight(0xffffff, 20)
 neonLight.position.set(-8, 2.4, -60)
@@ -86,16 +86,16 @@ function getRandomInt(max) {
 
 function flickerNeonLight() {
     if (neonLight.visible) {
-        if (getRandomInt(1600) == 1) {
+        if (getRandomInt(320) == 1) {
             neonLight.visible = false;
         }
     }
 
     if (!neonLight.visible) {
-        if (getRandomInt(200) == 1) {
+        if (getRandomInt(40) == 1) {
             neonLight.visible = true;
         }
     }
 }
 
-export { loadNeonLight, flickerNeonLight, ExteriorTriggers, showHUD };
+export { loadNeonLight, flickerNeonLight, exteriorTriggers, showHUD };
