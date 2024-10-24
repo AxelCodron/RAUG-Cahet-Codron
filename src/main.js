@@ -48,6 +48,11 @@ const keyStates = {};
 // Current room state
 let currentRoom = 'exterior';
 
+// ------------------------------------ GUI ------------------------------------
+
+const loaderElement = document.getElementById('loader');
+const blackScreenElement = document.getElementById('blackscreen');
+
 // -------------------------------- Event listeners --------------------------------
 
 document.addEventListener('keydown', (event) => {
@@ -182,6 +187,10 @@ function checkTriggers() {
 }
 
 function loadRoom(roomFile) {
+  // Show loader before starting the model load
+  blackScreenElement.style.display = 'block';
+  loaderElement.style.display = 'block';
+
   loader.load(roomFile, (gltf) => {
     // Clear the current scene
     scene.clear();
@@ -204,6 +213,12 @@ function loadRoom(roomFile) {
       }
     });
 
+    // Hide the loader once the model is fully loaded
+    setTimeout(() => {
+      loaderElement.style.display = 'none';
+      blackScreenElement.style.display = 'none';
+    }, 3000);
+    
     // Reset player position
     if (roomFile == 'exterior.glb') {
       playerCollider.start.set(0, 0.35, 0);
@@ -224,9 +239,20 @@ function loadRoom(roomFile) {
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from interior.js
-      loadMesh(scene)
+      loadMesh(scene);
     }
-  });
+  },
+    (progress) => {
+      // Update progress if needed (e.g., progress bar, percentage)
+      console.log((progress.loaded / progress.total * 100) + '%');
+    },
+    (error) => {
+      // Handle errors in loading
+      console.error('An error occurred while loading the model:', error);
+      loaderElement.style.display = 'none';
+      blackScreenElement.style.display = 'none';
+    }
+  );
 }
 
 function loadNewRoom(roomName) {
