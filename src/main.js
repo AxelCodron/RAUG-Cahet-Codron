@@ -156,6 +156,7 @@ function controls(deltaTime) {
       playerVelocity.y = 15;
     }
   }
+  
 
   // Objects interaction
   if (keyStates['KeyE']) {
