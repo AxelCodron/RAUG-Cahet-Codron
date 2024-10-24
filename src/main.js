@@ -7,8 +7,8 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 // Local imports
 import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
-import { InteriorTriggers } from './scenes/reception.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
+import { InteriorTriggers, loadMesh } from './scenes/reception.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -185,6 +185,7 @@ function loadRoom(roomFile) {
   loader.load(roomFile, (gltf) => {
     // Clear the current scene
     scene.clear();
+    worldOctree.clear()
 
     scene.add(gltf.scene);
 
@@ -216,14 +217,14 @@ function loadRoom(roomFile) {
       loadIdleInfected('idle-infected.glb', loader, scene);
     }
     else if (roomFile == 'reception.glb') {
-      playerCollider.start.set(0, 0.85, -4.5);
-      playerCollider.end.set(0, 1.5, -4.5);
+      playerCollider.start.set(5, 0.675, 3);
+      playerCollider.end.set(5, 1.325, 3);
       camera.position.copy(playerCollider.end);
       camera.rotation.set(0, 0, 0);
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from interior.js
-      // myFunction();
+      loadMesh(scene)
     }
   });
 }
