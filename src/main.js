@@ -5,9 +5,10 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { loadInfected, fromIdleToWalk, fromWalkToRun, infectedLoop } from './entities/infected.js';
+import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { InteriorTriggers } from './scenes/reception.js';
+import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -112,7 +113,10 @@ function updatePlayer(deltaTime) {
 
   playerCollisions();
 
-  camera.position.copy(playerCollider.end);
+  let playerPositions = playerCollider.end.clone();
+  playerPositions.y += 0.8;
+
+  camera.position.copy(playerPositions);
   playerLight.position.copy(playerCollider.end);
 }
 
@@ -161,14 +165,6 @@ function controls(deltaTime) {
   if (keyStates['KeyE']) {
     showHUD();
   }
-
-  // test
-  if (keyStates['KeyR']) {
-    fromIdleToWalk();
-  }
-  if (keyStates['KeyT']) {
-    fromWalkToRun();
-  }
 }
 
 function checkTriggers() {
@@ -216,7 +212,8 @@ function loadRoom(roomFile) {
 
       // Call the functions from exterior.js
       loadNeonLight(scene);
-      loadInfected('Soldier.glb', loader, scene);
+      loadInfected('moving-infected.glb', loader, scene);
+      loadIdleInfected('idle-infected.glb', loader, scene);
     }
     else if (roomFile == 'reception.glb') {
       playerCollider.start.set(0, 0.85, -4.5);
@@ -260,6 +257,7 @@ function animate() {
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
   infectedLoop(deltaTime);
+  idleInfectedLoop(deltaTime);
 
   // we look for collisions in substeps to mitigate the risk of
   // an object traversing another too quickly for detection.
