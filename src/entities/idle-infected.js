@@ -9,7 +9,7 @@ let idleAction;
 // Animations names:
 // static zombie: Armature|mixamo.com|Layer0
 
-function loadIdleInfected(infectedFile, loader, scene, state = "Armature|mixamo.com|Layer0") {
+function loadIdleInfected(infectedFile, loader, scene) {
     loader.load(infectedFile, (gltf) => {
         model = gltf.scene;
 
