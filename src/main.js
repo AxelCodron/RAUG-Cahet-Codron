@@ -285,7 +285,7 @@ loadRoom('exterior.glb');
 function animate() {
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
-  infectedLoop(deltaTime);
+  infectedLoop(deltaTime, playerCollider);
   idleInfectedLoop(deltaTime);
 
   // we look for collisions in substeps to mitigate the risk of
