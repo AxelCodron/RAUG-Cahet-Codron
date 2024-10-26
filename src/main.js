@@ -5,8 +5,9 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { loadInfected, fromIdleToWalk, fromWalkToRun, infectedLoop } from './entities/infected.js';
+import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
+import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
 import { InteriorTriggers, loadMesh } from './scenes/reception.js';
 
 // -------------------------------- Base setup --------------------------------
@@ -46,6 +47,11 @@ const keyStates = {};
 
 // Current room state
 let currentRoom = 'exterior';
+
+// ------------------------------------ GUI ------------------------------------
+
+const loaderElement = document.getElementById('loader');
+const blackScreenElement = document.getElementById('blackscreen');
 
 // -------------------------------- Event listeners --------------------------------
 
@@ -112,7 +118,10 @@ function updatePlayer(deltaTime) {
 
   playerCollisions();
 
-  camera.position.copy(playerCollider.end);
+  let playerPositions = playerCollider.end.clone();
+  playerPositions.y += 0.8;
+
+  camera.position.copy(playerPositions);
   playerLight.position.copy(playerCollider.end);
 }
 
@@ -162,14 +171,6 @@ function controls(deltaTime) {
   if (keyStates['KeyE']) {
     showHUD();
   }
-
-  // test
-  if (keyStates['KeyR']) {
-    fromIdleToWalk();
-  }
-  if (keyStates['KeyT']) {
-    fromWalkToRun();
-  }
 }
 
 function checkTriggers() {
@@ -187,6 +188,10 @@ function checkTriggers() {
 }
 
 function loadRoom(roomFile) {
+  // Show loader before starting the model load
+  blackScreenElement.style.display = 'block';
+  loaderElement.style.display = 'block';
+
   loader.load(roomFile, (gltf) => {
     // Clear the current scene
     scene.clear();
@@ -209,6 +214,12 @@ function loadRoom(roomFile) {
       }
     });
 
+    // Hide the loader once the model is fully loaded
+    setTimeout(() => {
+      loaderElement.style.display = 'none';
+      blackScreenElement.style.display = 'none';
+    }, 3000);
+    
     // Reset player position
     if (roomFile == 'exterior.glb') {
       playerCollider.start.set(0, 0.35, 0);
@@ -218,7 +229,8 @@ function loadRoom(roomFile) {
 
       // Call the functions from exterior.js
       loadNeonLight(scene);
-      loadInfected('Soldier.glb', loader, scene);
+      loadInfected('moving-infected.glb', loader, scene);
+      loadIdleInfected('idle-infected.glb', loader, scene);
     }
     else if (roomFile == 'reception.glb') {
       playerCollider.start.set(5, 0.675, 3);
@@ -228,9 +240,20 @@ function loadRoom(roomFile) {
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from interior.js
-      loadMesh(scene)
+      loadMesh(scene);
     }
-  });
+  },
+    (progress) => {
+      // Update progress if needed (e.g., progress bar, percentage)
+      console.log((progress.loaded / progress.total * 100) + '%');
+    },
+    (error) => {
+      // Handle errors in loading
+      console.error('An error occurred while loading the model:', error);
+      loaderElement.style.display = 'none';
+      blackScreenElement.style.display = 'none';
+    }
+  );
 }
 
 function loadNewRoom(roomName) {
@@ -262,6 +285,7 @@ function animate() {
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
   infectedLoop(deltaTime);
+  idleInfectedLoop(deltaTime);
 
   // we look for collisions in substeps to mitigate the risk of
   // an object traversing another too quickly for detection.
