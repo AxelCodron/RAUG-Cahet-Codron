@@ -9,7 +9,6 @@ import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
 import { InteriorTriggers, loadMesh } from './scenes/reception.js';
-import { flashRed } from './utils/shake-camera.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -170,7 +169,6 @@ function controls(deltaTime) {
   // Objects interaction
   if (keyStates['KeyE']) {
     showHUD();
-    flashRed();
   }
 }
 

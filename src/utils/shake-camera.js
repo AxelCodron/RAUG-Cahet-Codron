@@ -14,6 +14,4 @@ function flashRed() {
     }, 200);
 }
 
-// TODO: remove TWEEN
-
 export { flashRed };

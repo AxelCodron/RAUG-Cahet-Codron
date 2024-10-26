@@ -1,6 +1,7 @@
 // File for the infected model
 
 import * as THREE from 'three';
+import { flashRed } from '../utils/shake-camera';
 
 let model, mixer;
 
@@ -160,6 +161,7 @@ function infectedLoop(deltaTime, playerCollider) {
     // Check for collision with player
     if (playerCollider.start.distanceTo(model.position) < 1 && !isFallingBack) {
         fromRunTofallBack();
+        flashRed();
         isFallingBack = true;
         return;
     }

@@ -1,6 +1,7 @@
 @font-face {
-  font-family: 'Valium';
-  src: url('/assets/fonts/valium.ttf') format('truetype');
+  font-family: 'ZOMBIE';
+  src: url('/assets/fonts/ZOMBIE.TTF') format('truetype');
+  font-display: swap;
 }
 
 html,
@@ -11,7 +12,6 @@ body {
 }
 
 /* game text */
-
 .hud-text {
   height: 100%;
   width: 100%;
@@ -23,7 +23,7 @@ body {
   font-size: 50px;
   z-index: 1;
   pointer-events: none;
-  font-family: Valium;
+  font-family: ZOMBIE, sans-serif;
   visibility: hidden;
 }
 
@@ -42,7 +42,6 @@ body {
 }
 
 /* loader */
-
 .loader {
   border: 5px solid #f3f3f3;
   border-top: 5px solid #3d3d3d;
@@ -51,8 +50,8 @@ body {
   height: 40px;
   animation: spin 1s linear infinite;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 48%;
+  left: 48%;
   z-index: 3;
   background-color: black;
 }
