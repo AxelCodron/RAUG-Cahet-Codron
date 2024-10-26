@@ -76,6 +76,20 @@ function intersectobject(playerBox, Trigger, inTrigger, text)
     return inTrigger
 }
 
+function loadDrawer(infectedFile, loader, scene) {
+    loader.load(infectedFile, (gltf) => {
+        model = gltf.scene;
+
+        model.scale.set(2.3, 1.778, 1);
+        // temporary manual positioning
+        model.position.x = 0.2;
+        model.position.y = 0.739;
+        model.position.z = 0.9;
+
+        scene.add(model);
+    });
+}
+
 function InteriorTriggers(playerBox) {
     // Check for door trigger collision
     if (playerBox.intersectsBox(interiorDoorTrigger)) {
@@ -103,4 +117,4 @@ function loadMesh(scene)
 {
 }
 
-export { InteriorTriggers, loadMesh };
+export { loadDrawer, InteriorTriggers, loadMesh };

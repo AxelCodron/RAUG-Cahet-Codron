@@ -241,6 +241,7 @@ function loadRoom(roomFile) {
 
       // Call the functions from interior.js
       loadMesh(scene);
+      loadIdleInfected('drawer.glb', loader, scene);
     }
   },
     (progress) => {
