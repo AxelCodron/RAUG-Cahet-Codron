@@ -58,8 +58,12 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* black screen */
@@ -69,4 +73,18 @@ body {
   width: 100%;
   height: 100%;
   background-color: black;
+}
+
+/* damage effect */
+.damage-overlay {
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  opacity: 0;
+}
+
+.fade-out {
+  transition: opacity 1s ease-out;
 }

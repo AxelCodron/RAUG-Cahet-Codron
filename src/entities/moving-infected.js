@@ -7,6 +7,10 @@ let model, mixer;
 let idleAction, walkAction, walkWithArmsAction, runAction, attackAction, fallBackwardAction, fallForwardAction;
 let actions;
 
+let isFallingBack = false;
+let isDead = false;
+const infectedSpeed = 4;
+
 // Animations names:
 // NOT USEFUL (animations that move the character on their own):
 // walk with arms: Walk
@@ -23,14 +27,14 @@ let actions;
 // falling forward: FallingForward
 
 
-function loadInfected(infectedFile, loader, scene, state = "Idle") {
+function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
     loader.load(infectedFile, (gltf) => {
         model = gltf.scene;
 
         // temporary manual positioning
         model.position.z = -61;
         model.position.x = -8;
-        
+
         scene.add(model);
 
         model.traverse(function (object) {
@@ -66,14 +70,6 @@ function loadInfected(infectedFile, loader, scene, state = "Idle") {
         else if (state === 'Attack') {
             attackAction.play();
         }
-        else if (state === 'FallingBack') {
-            walkAction.loop = THREE.LoopOnce;
-            fallBackwardAction.play();
-        }
-        else if (state === 'FallingForward') {
-            walkAction.loop = THREE.LoopOnce;
-            fallForwardAction.play();
-        }
     });
 }
 
@@ -103,6 +99,12 @@ function fromWalkToIdle() {
 }
 function fromWalkWithArmsToIdle() {
     prepareCrossFade(walkWithArmsAction, idleAction, 1.0);
+}
+function fromRunTofallBack() {
+    runAction.stop();
+    fallBackwardAction.loop = THREE.LoopOnce;
+    fallBackwardAction.clampWhenFinished = true;
+    fallBackwardAction.play();
 }
 
 function prepareCrossFade(startAction, endAction, duration) {
@@ -148,19 +150,52 @@ function setWeight(action, weight) {
     }
 }
 
-function infectedLoop(deltaTime) {
+function infectedLoop(deltaTime, playerCollider) {
+    if (!model) {
+        return;
+    }
+    if (isDead) {
+        return;
+    }
+    // Check for collision with player
+    if (playerCollider.start.distanceTo(model.position) < 1 && !isFallingBack) {
+        fromRunTofallBack();
+        isFallingBack = true;
+        return;
+    }
+
+    // If falling back, update the mixer
+    if (isFallingBack) {
+        if (mixer) {
+            mixer.update(deltaTime);
+            // Check if the falling back animation has finished
+            if (!fallBackwardAction.isRunning()) {
+                // Animation is complete, set dead state
+                isFallingBack = false;
+                isDead = true;
+                console.log("Infected is dead");
+            }
+        }
+        return; // Exit to prevent movement while falling back
+    }
     if (mixer) {
         mixer.update(deltaTime);
     }
-    // if (walkAction && walkAction.isRunning()) {
-    //     model.position.z -= deltaTime;
-    // }
-    // if (runAction && runAction.isRunning()) {
-    //     model.position.z -= 0.015 * deltaTime;
-    // }
+    const playerPosition = playerCollider.end;
+    const direction = new THREE.Vector3();
+
+    // only X and Z vectors are needed
+    direction.subVectors(new THREE.Vector3(playerPosition.x, model.position.y, playerPosition.z), model.position).normalize();
+
+    model.position.add(direction.multiplyScalar(infectedSpeed * deltaTime));
+
+    const lookAt = new THREE.Vector3(playerPosition.x, model.position.y, playerPosition.z);
+    model.lookAt(lookAt);
 }
 
-export { loadInfected, fromIdleToWalk, fromWalkToRun,
+export {
+    loadInfected, fromIdleToWalk, fromWalkToRun,
     fromWalkToWalkWithArms, fromIdleToWalkWithArms, fromWalkWithArmsToRun,
     fromRunToWalk, fromRunToWalkWithArms, fromWalkToIdle,
-    fromWalkWithArmsToIdle, infectedLoop };
+    fromWalkWithArmsToIdle, infectedLoop
+};
