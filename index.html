@@ -11,29 +11,38 @@
 
 <body>
   <div id="container">
+    <!-- Utils -->
     <div id="blackscreen" class="blackscreen"></div>
+
     <div id="damage-overlay" class="damage-overlay"></div>
+
     <div id="loader" class="loader"></div>
-    <div id ="hud-text" class="hud-text">
+
+    <!-- Intro text -->
+    <div id="intro-text" class="intro-text">
+      <p>You haven't had news of your little brother since he went to the hospital... You decided to look for him there.
+      </p>
+      <p class="subtitle">Press any key to start</p>
+    </div>
+
+    <!-- Interactions -->
+    <div id="hud-text" class="hud-text">
       You searched the corpse and found a key
     </div>
-    <div id ="interact-text" class="interact-text">
+    <div id="interact-text" class="interact-text">
       Press E to search the corpse
     </div>
-    <div id ="drawer1-text" class="interact-text">
+    <div id="drawer1-text" class="interact-text">
       Press E to search the left drawer
     </div>
-    <div id ="drawer2-text" class="interact-text">
-      Press E to search the right drawer 
+    <div id="drawer2-text" class="interact-text">
+      Press E to search the right drawer
     </div>
-    <div id ="gooddrawer-text" class="interact-text">
+    <div id="gooddrawer-text" class="interact-text">
       Press E to search the center drawer
     </div>
   </div>
-  <!--
-  <script src="./jsm/libs/ammo.wasm.js"></script>
-  -->
- <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
 import { InteriorTriggers, loadMesh } from './scenes/reception.js';
+import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -189,8 +190,9 @@ function checkTriggers() {
 
 function loadRoom(roomFile) {
   // Show loader before starting the model load
-  blackScreenElement.style.display = 'block';
-  loaderElement.style.display = 'block';
+  console.log('Loading room:', roomFile);
+  blackScreenElement.style.visibility = 'visible';
+  loaderElement.style.visibility = 'visible';
 
   loader.load(roomFile, (gltf) => {
     // Clear the current scene
@@ -216,8 +218,8 @@ function loadRoom(roomFile) {
 
     // Hide the loader once the model is fully loaded
     setTimeout(() => {
-      loaderElement.style.display = 'none';
-      blackScreenElement.style.display = 'none';
+      loaderElement.style.visibility = 'hidden';
+      blackScreenElement.style.visibility = 'hidden';
     }, 3000);
     
     // Reset player position
@@ -250,8 +252,8 @@ function loadRoom(roomFile) {
     (error) => {
       // Handle errors in loading
       console.error('An error occurred while loading the model:', error);
-      loaderElement.style.display = 'none';
-      blackScreenElement.style.display = 'none';
+      loaderElement.style.visibility = 'hidden';
+      blackScreenElement.style.visibility = 'hidden';
     }
   );
 }
@@ -274,10 +276,22 @@ function teleportPlayerIfOob() {
 
 // -------------------------------- Load the initial room --------------------------------
 
-const loader = new GLTFLoader().setPath('/assets/models/');
 
-// Initial room load
-loadRoom('exterior.glb');
+
+const loader = new GLTFLoader().setPath('/assets/models/');
+let gameStarted = false;
+
+showIntroduction();
+
+if (!gameStarted) {
+  waitForAnyKey(() => {
+    gameStarted = true;
+    hideIntroduction();
+
+    // Initial room load
+    loadRoom('exterior.glb');
+  });
+}
 
 // -------------------------------- Main loop --------------------------------
 
