@@ -8,7 +8,8 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
-import { InteriorTriggers, loadMesh } from './scenes/reception.js';
+import { loadDrawer, InteriorTriggers, showMessage} from './scenes/reception.js';
+import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -171,6 +172,17 @@ function controls(deltaTime) {
   if (keyStates['KeyE']) {
     showHUD();
   }
+  // for reception
+  if (keyStates['KeyO'])
+  {
+    if (currentRoom === 'reception') {
+      showMessage();
+    }
+    if (currentRoom === 'corridor') {
+      showCorridorMessage();
+    }
+
+  }
 }
 
 function checkTriggers() {
@@ -184,6 +196,9 @@ function checkTriggers() {
   }
   if (currentRoom === 'reception') {
     InteriorTriggers(playerBox);
+  }
+  if (currentRoom === 'corridor') {
+    corridorTriggers(playerBox);
   }
 }
 
@@ -240,8 +255,14 @@ function loadRoom(roomFile) {
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from interior.js
-      loadMesh(scene);
-      loadIdleInfected('drawer.glb', loader, scene);
+      loadDrawer('drawer.glb', loader, scene);
+    }
+    else if (roomFile == 'corridor.glb') {
+      playerCollider.start.set(2.2, 0.675, -15);
+      playerCollider.end.set(2.2, 1.325, -15);
+      camera.position.copy(playerCollider.end);
+      camera.rotation.set(0, 180, 0);
+      playerLight.position.copy(playerCollider.end);
     }
   },
     (progress) => {

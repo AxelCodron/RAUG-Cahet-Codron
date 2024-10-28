@@ -6,14 +6,73 @@ import { loadNewRoom } from '../main';
 
 // -------------------------------- GUI --------------------------------
 
-const hudText = document.getElementById('hud-text');
 const drawer1Text = document.getElementById('drawer1-text');
 const drawer2Text = document.getElementById('drawer2-text');
 const goodDrawerText = document.getElementById('gooddrawer-text');
 
+const badText = document.getElementById('bad-text');
+const goodText = document.getElementById('good-text');
+const searchedText = document.getElementById('searched-text');
 
-function displayText(object)
-{
+const useCardText = document.getElementById('useCard-text');
+const dontOpenText = document.getElementById('dontOpen-text');
+const openText = document.getElementById('Open-text');
+
+let playerInDrawer1TriggerZone = false;
+let playerInDrawer2TriggerZone = false;
+let playerInGoodDrawerTriggerZone = false;
+let playerInRightDoorTriggerZone = false;
+let playerInLeftDoorTriggerZone = false;
+let animateDrawer = false;
+let itemsOn = false;
+let leftDoorOpen = false; 
+let model;
+
+function showMessage() {
+    if (playerInDrawer1TriggerZone) {
+        hideText(drawer1Text)
+        displayText(badText);
+    }
+    if (playerInDrawer2TriggerZone) {
+        hideText(drawer2Text)
+        displayText(badText);
+    }
+    if (playerInGoodDrawerTriggerZone & !itemsOn) {
+        hideText(goodDrawerText);
+        animateDrawer = true;
+        displayText(goodText);
+        itemsOn = true;
+    }
+    else if (playerInGoodDrawerTriggerZone & itemsOn & goodText.style.visibility == "hidden") {
+        hideText(goodDrawerText);
+        displayText(searchedText);
+    }
+    if (playerInRightDoorTriggerZone){
+        hideText(useCardText);
+        displayText(dontOpenText);
+    }
+    if (playerInLeftDoorTriggerZone){
+        hideText(useCardText);
+        leftDoorOpen = true;
+    }
+}
+function hideMessage() {
+    if (playerInDrawer1TriggerZone | playerInDrawer2TriggerZone) {
+        hideText(badText);
+    }
+    if (playerInGoodDrawerTriggerZone) {
+        hideText(goodText);
+        hideText(searchedText);
+    }
+    if (playerInRightDoorTriggerZone){
+        hideText(dontOpenText);
+    }
+    if (playerInLeftDoorTriggerZone){
+        hideText(openText);
+    }
+}
+
+function displayText(object) {
     object.style.visibility = "visible";
 }
 
@@ -22,11 +81,6 @@ function hideText(object) {
 }
 
 // ------------------- Trigger Function -------------------
-
-let playerInDrawer1TriggerZone = false;
-let playerInDrawer2TriggerZone = false;
-let playerInGoodDrawerTriggerZone = false;
-
 
 const interiorDoorTrigger = new THREE.Box3(
     new THREE.Vector3(3.3, 0, 4.),
@@ -47,6 +101,17 @@ const goodDrawerTrigger = new THREE.Box3(
     new THREE.Vector3(-0.25, 0, -1.5),
     new THREE.Vector3(0.75, 2, -0.5)
 )
+
+const rightDoorTrigger = new THREE.Box3(
+    new THREE.Vector3(4.35, 0, -4.6),
+    new THREE.Vector3(5.85, 2, -4.2)
+)
+
+const leftDoorTrigger = new THREE.Box3(
+    new THREE.Vector3(-5.5, 0, -4.6),
+    new THREE.Vector3(-4, 2, -4.2)
+)
+
 // const doorTriggerSize = new THREE.Vector3();
 // interiorDoorTrigger.getSize(doorTriggerSize);
 
@@ -70,21 +135,20 @@ function intersectobject(playerBox, Trigger, inTrigger, text)
         if (inTrigger) {
             console.log("Exited the trigger zone");
             hideText(text);
+            hideMessage(text);
             return false;
         }
     }
     return inTrigger
 }
 
-function loadDrawer(infectedFile, loader, scene) {
-    loader.load(infectedFile, (gltf) => {
+function loadDrawer(drawer, loader, scene) {
+    loader.load(drawer, (gltf) => {
         model = gltf.scene;
 
         model.scale.set(2.3, 1.778, 1);
-        // temporary manual positioning
-        model.position.x = 0.2;
-        model.position.y = 0.739;
-        model.position.z = 0.9;
+        model.position.set(0.2, 0.739, -0.571);
+        model.rotation.y += Math.PI;
 
         scene.add(model);
     });
@@ -95,26 +159,21 @@ function InteriorTriggers(playerBox) {
     if (playerBox.intersectsBox(interiorDoorTrigger)) {
         loadNewRoom("exterior");
     }
+    if (playerBox.intersectsBox(leftDoorTrigger) & leftDoorOpen == true) {
+        loadNewRoom("corridor");
+    }
     playerInDrawer1TriggerZone = intersectobject(playerBox, drawer1Trigger, playerInDrawer1TriggerZone, drawer1Text)
     playerInDrawer2TriggerZone = intersectobject(playerBox, drawer2Trigger, playerInDrawer2TriggerZone, drawer2Text)
     playerInGoodDrawerTriggerZone = intersectobject(playerBox, goodDrawerTrigger, playerInGoodDrawerTriggerZone, goodDrawerText)
+    playerInRightDoorTriggerZone = intersectobject(playerBox, rightDoorTrigger, playerInRightDoorTriggerZone, useCardText)
+    playerInLeftDoorTriggerZone = intersectobject(playerBox, leftDoorTrigger, playerInLeftDoorTriggerZone, useCardText)
 
-    // var loader = new GLTFLoader();
-
-    // const loader = new GLTFLoader();
-    //     loader.load('drawer.glb', (gltf) => {
-    //         drawer = gltf.scene;
-    //         scene.add(drawer);
-
-    //         drawer.position.set(0, 0, 0);
-    //         if (playerInGoodDrawerTriggerZone and ) 
-    //         animateDrawer();
-    //     });
+    if (animateDrawer) {
+        if (model.position.z > -0.9){
+            model.position.z -= 0.01;
+        }
+    }
 
 }
 
-function loadMesh(scene)
-{
-}
-
-export { loadDrawer, InteriorTriggers, loadMesh };
+export { loadDrawer, InteriorTriggers, showMessage };
