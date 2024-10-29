@@ -154,7 +154,7 @@ function loadDrawer(drawer, loader, scene) {
     });
 }
 
-function InteriorTriggers(playerBox) {
+function receptionTriggers(playerBox) {
     // Check for door trigger collision
     if (playerBox.intersectsBox(interiorDoorTrigger)) {
         loadNewRoom("exterior");
@@ -176,4 +176,4 @@ function InteriorTriggers(playerBox) {
 
 }
 
-export { loadDrawer, InteriorTriggers, showMessage };
+export { loadDrawer, receptionTriggers, showMessage };

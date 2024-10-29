@@ -9,13 +9,14 @@ let idleAction;
 // Animations names:
 // static zombie: Armature|mixamo.com|Layer0
 
-function loadIdleInfected(infectedFile, loader, scene) {
+function loadIdleInfected(infectedFile, loader, scene, position = new THREE.Vector3(0, 0, -8), rotation = new THREE.Vector3(0, 0, 0)) {
     loader.load(infectedFile, (gltf) => {
         model = gltf.scene;
 
         model.scale.set(0.6, 0.6, 0.6);
         // temporary manual positioning
-        model.position.z = -8;
+        model.position.set(position.x, position.y, position.z)
+        model.rotation.set(rotation.x, rotation.y, rotation.z)
         
         scene.add(model);
 

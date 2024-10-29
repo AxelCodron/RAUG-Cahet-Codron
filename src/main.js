@@ -8,7 +8,7 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 import { loadInfected, infectedLoop } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
-import { loadDrawer, InteriorTriggers, showMessage} from './scenes/reception.js';
+import { loadDrawer, receptionTriggers, showMessage} from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
 
 // -------------------------------- Base setup --------------------------------
@@ -195,7 +195,7 @@ function checkTriggers() {
     exteriorTriggers(playerBox);
   }
   if (currentRoom === 'reception') {
-    InteriorTriggers(playerBox);
+    receptionTriggers(playerBox);
   }
   if (currentRoom === 'corridor') {
     corridorTriggers(playerBox);
@@ -254,7 +254,7 @@ function loadRoom(roomFile) {
       camera.rotation.set(0, 0, 0);
       playerLight.position.copy(playerCollider.end);
 
-      // Call the functions from interior.js
+      // Call the functions from reception.js
       loadDrawer('drawer.glb', loader, scene);
     }
     else if (roomFile == 'corridor.glb') {
@@ -263,6 +263,9 @@ function loadRoom(roomFile) {
       camera.position.copy(playerCollider.end);
       camera.rotation.set(0, 180, 0);
       playerLight.position.copy(playerCollider.end);
+
+      // Call the functions from reception.js
+      loadIdleInfected('idle-infected.glb', loader, scene, new THREE.Vector3(-2, 0, 3.5), new THREE.Vector3(0, 180, 0));
     }
   },
     (progress) => {
