@@ -166,19 +166,16 @@ function infectedLoop(deltaTime, playerCollider) {
         return;
     }
 
-    // If falling back, update the mixer
     if (isFallingBack) {
         if (mixer) {
             mixer.update(deltaTime);
-            // Check if the falling back animation has finished
             if (!fallBackwardAction.isRunning()) {
-                // Animation is complete, set dead state
                 isFallingBack = false;
                 isDead = true;
                 console.log("Infected is dead");
             }
         }
-        return; // Exit to prevent movement while falling back
+        return;
     }
     if (mixer) {
         mixer.update(deltaTime);
@@ -195,9 +192,41 @@ function infectedLoop(deltaTime, playerCollider) {
     model.lookAt(lookAt);
 }
 
+function removeInfected() {
+    if (mixer) {
+        mixer.stopAllAction();
+        mixer.uncacheRoot(model);
+        mixer = null;
+    }
+
+    if (model) {
+        model.traverse((object) => {
+            if (object.isMesh) {
+                object.geometry.dispose();
+                if (object.material.isMaterial) {
+                    object.material.dispose();
+                } else if (Array.isArray(object.material)) {
+                    object.material.forEach((material) => material.dispose());
+                }
+            }
+        });
+        
+        if (model.parent) {
+            model.parent.remove(model);
+        }
+        
+        model = null;
+    }
+
+    // Reset states
+    isDead = false;
+    isFallingBack = false;
+}
+
+
 export {
     loadInfected, fromIdleToWalk, fromWalkToRun,
     fromWalkToWalkWithArms, fromIdleToWalkWithArms, fromWalkWithArmsToRun,
     fromRunToWalk, fromRunToWalkWithArms, fromWalkToIdle,
-    fromWalkWithArmsToIdle, infectedLoop
+    fromWalkWithArmsToIdle, infectedLoop, removeInfected
 };

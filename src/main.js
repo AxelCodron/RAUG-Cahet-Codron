@@ -5,9 +5,10 @@ import { Octree } from 'three/addons/math/Octree.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
-import { loadInfected, infectedLoop } from './entities/moving-infected.js';
+import { loadInfected, infectedLoop, removeInfected } from './entities/moving-infected.js';
 import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
+import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 import { loadDrawer, receptionTriggers, showMessage} from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
 
@@ -58,6 +59,12 @@ const blackScreenElement = document.getElementById('blackscreen');
 
 document.addEventListener('keydown', (event) => {
   keyStates[event.code] = true;
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyE') {
+    showHUD(scene);
+  }
 });
 
 document.addEventListener('keyup', (event) => {
@@ -204,11 +211,13 @@ function checkTriggers() {
 
 function loadRoom(roomFile) {
   // Show loader before starting the model load
-  blackScreenElement.style.display = 'block';
-  loaderElement.style.display = 'block';
+  console.log('Loading room:', roomFile);
+  blackScreenElement.style.visibility = 'visible';
+  loaderElement.style.visibility = 'visible';
 
   loader.load(roomFile, (gltf) => {
     // Clear the current scene
+    removeInfected();
     scene.clear();
     worldOctree.clear()
 
@@ -231,8 +240,8 @@ function loadRoom(roomFile) {
 
     // Hide the loader once the model is fully loaded
     setTimeout(() => {
-      loaderElement.style.display = 'none';
-      blackScreenElement.style.display = 'none';
+      loaderElement.style.visibility = 'hidden';
+      blackScreenElement.style.visibility = 'hidden';
     }, 3000);
     
     // Reset player position
@@ -275,8 +284,8 @@ function loadRoom(roomFile) {
     (error) => {
       // Handle errors in loading
       console.error('An error occurred while loading the model:', error);
-      loaderElement.style.display = 'none';
-      blackScreenElement.style.display = 'none';
+      loaderElement.style.visibility = 'hidden';
+      blackScreenElement.style.visibility = 'hidden';
     }
   );
 }
@@ -300,22 +309,31 @@ function teleportPlayerIfOob() {
 // -------------------------------- Load the initial room --------------------------------
 
 const loader = new GLTFLoader().setPath('/assets/models/');
+let gameStarted = false;
 
-// Initial room load
-loadRoom('exterior.glb');
+showIntroduction();
+
+if (!gameStarted) {
+  waitForAnyKey(() => {
+    gameStarted = true;
+    hideIntroduction();
+
+    // Initial room load
+    loadRoom('exterior.glb');
+  });
+}
 
 // -------------------------------- Main loop --------------------------------
 
 function animate() {
   const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
 
-  infectedLoop(deltaTime, playerCollider);
-  idleInfectedLoop(deltaTime);
-
   // we look for collisions in substeps to mitigate the risk of
   // an object traversing another too quickly for detection.
 
   for (let i = 0; i < STEPS_PER_FRAME; i++) {
+    infectedLoop(deltaTime, playerCollider);
+    idleInfectedLoop(deltaTime);
     controls(deltaTime);
     updatePlayer(deltaTime);
     teleportPlayerIfOob();

@@ -11,13 +11,28 @@
 
 <body>
   <div id="container">
+    <!-- Utils -->
     <div id="blackscreen" class="blackscreen"></div>
+
     <div id="damage-overlay" class="damage-overlay"></div>
+
     <div id="loader" class="loader"></div>
-    <div id ="hud-text" class="hud-text">
-      You searched the corpse and found a key
+
+    <!-- Intro text -->
+    <div id="intro-text" class="intro-text">
+      <p>You haven't had news of your little brother since he went to the hospital... You decided to look for him there.
+      </p>
+      <p class="subtitle">Press any key to start</p>
     </div>
-    <div id ="interact-text" class="interact-text">
+
+    <!-- Interactions -->
+    <div id="hud-text" class="hud-text">
+      You searched the corpse and found an eye
+    </div>
+    <div id="solved-code-text" class="hud-text">
+      You found the hospital key
+    </div>
+    <div id="interact-text" class="interact-text">
       Press E to search the corpse
     </div>
     <div id ="drawer1-text" class="interact-text">
@@ -57,10 +72,7 @@
       Are you OK ??? Do you want to die ?
     </div>
   </div>
-  <!--
-  <script src="./jsm/libs/ammo.wasm.js"></script>
-  -->
- <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 
 </html>

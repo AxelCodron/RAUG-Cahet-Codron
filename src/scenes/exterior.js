@@ -3,11 +3,13 @@
 import * as THREE from 'three';
 
 import { loadNewRoom } from '../main';
+import { clearCode, useCode } from '../utils/digits-code';
 
 // ------------------- Variables -------------------
 
-// Flag to track if player is inside the trigger
+// Flags to track if player is inside the trigger
 let playerInCorpseTriggerZone = false;
+let playerInCodeTriggerZone = false;
 
 const corpseTrigger = new THREE.Box3(
     // Min corner (xMin, yMin, zMin)
@@ -22,9 +24,16 @@ const doorTrigger = new THREE.Box3(
     new THREE.Vector3(-7.45, 3.9, 0.5)
 );
 
+// Code trigger
+const codeTrigger = new THREE.Box3(
+    new THREE.Vector3(-36, 0, -32.3),
+    new THREE.Vector3(-34, 3, -29)
+);
+
 // -------------------------------- GUI --------------------------------
 
 const hudText = document.getElementById('hud-text');
+const codeText = document.getElementById('code-text');
 const interactText = document.getElementById('interact-text');
 
 function showHUD() {
@@ -43,6 +52,14 @@ function showInteractText() {
 
 function hideInteractText() {
     interactText.style.visibility = "hidden";
+}
+
+function showCodeText() {
+    codeText.style.visibility = "visible";
+}
+
+function hideCodeText() {
+    codeText.style.visibility = "hidden";
 }
 
 // ------------------- Trigger Function -------------------
@@ -65,10 +82,32 @@ function exteriorTriggers(playerBox) {
         }
     }
 
+    // Check for code trigger collision
+    if (playerBox.intersectsBox(codeTrigger)) {
+        if (!playerInCodeTriggerZone) {
+            console.log("Entered the code trigger zone");
+            showCodeText();
+            useCode();
+            playerInCodeTriggerZone = true;
+        }
+    }
+    else {
+        if (playerInCodeTriggerZone) {
+            console.log("Exited the code trigger zone");
+            hideCodeText();
+            clearCode();
+            playerInCodeTriggerZone = false;
+        }
+    }
+
     // Check for door trigger collision
     if (playerBox.intersectsBox(doorTrigger)) {
         loadNewRoom("reception");
     }
+}
+
+function removeCodeTrigger() {
+    codeTrigger.makeEmpty();
 }
 
 // ------------------- Neon Light -------------------
@@ -98,4 +137,4 @@ function flickerNeonLight() {
     }
 }
 
-export { loadNeonLight, flickerNeonLight, exteriorTriggers, showHUD };
+export { loadNeonLight, flickerNeonLight, exteriorTriggers, showHUD, removeCodeTrigger };
