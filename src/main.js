@@ -49,6 +49,7 @@ const keyStates = {};
 
 // Current room state
 let currentRoom = 'exterior';
+let precedentRoom = 'exterior'
 
 // ------------------------------------ GUI ------------------------------------
 
@@ -256,21 +257,36 @@ function loadRoom(roomFile) {
       loadInfected('moving-infected.glb', loader, scene);
       loadIdleInfected('idle-infected.glb', loader, scene);
     }
-    else if (roomFile == 'reception.glb') {
-      playerCollider.start.set(5, 0.675, 3);
-      playerCollider.end.set(5, 1.325, 3);
+    else if (roomFile === 'reception.glb') {
+      if (precedentRoom === 'exterior') {
+        playerCollider.start.set(5, 0.675, 3);
+        playerCollider.end.set(5, 1.325, 3);
+        camera.rotation.set(0, 0, 0);
+      }
+      else {
+        playerCollider.start.set(-4.7, 0.675, -4);
+        playerCollider.end.set(-4.7, 1.325, -4);
+        camera.rotation.set(0, 180, 0);
+      }
+
       camera.position.copy(playerCollider.end);
-      camera.rotation.set(0, 0, 0);
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from reception.js
       loadDrawer('drawer.glb', loader, scene);
     }
-    else if (roomFile == 'corridor.glb') {
-      playerCollider.start.set(2.2, 0.675, -15);
-      playerCollider.end.set(2.2, 1.325, -15);
+    else if (roomFile === 'corridor.glb') {
+      if (precedentRoom === 'reception' ){
+        playerCollider.start.set(2.2, 0.675, -15);
+        playerCollider.end.set(2.2, 1.325, -15);
+        camera.rotation.set(0, 180, 0);
+      }
+      else {
+        playerCollider.start.set(2.5, 0.675, 8);
+        playerCollider.end.set(2.5, 1.325, 8);
+        camera.rotation.set(0, 0, 0);
+      }
       camera.position.copy(playerCollider.end);
-      camera.rotation.set(0, 180, 0);
       playerLight.position.copy(playerCollider.end);
 
       // Call the functions from reception.js
@@ -291,6 +307,7 @@ function loadRoom(roomFile) {
 }
 
 function loadNewRoom(roomName) {
+  precedentRoom = currentRoom;
   currentRoom = roomName;
   loadRoom(roomName + '.glb');
 }
