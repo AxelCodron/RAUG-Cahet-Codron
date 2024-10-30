@@ -160,6 +160,7 @@ function receptionTriggers(playerBox) {
         loadNewRoom("exterior");
     }
     if (playerBox.intersectsBox(leftDoorTrigger) & leftDoorOpen == true) {
+        leftDoorOpen = false;
         loadNewRoom("corridor");
     }
     playerInDrawer1TriggerZone = intersectobject(playerBox, drawer1Trigger, playerInDrawer1TriggerZone, drawer1Text)

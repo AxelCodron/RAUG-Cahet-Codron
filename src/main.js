@@ -11,6 +11,7 @@ import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js'
 import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 import { loadDrawer, receptionTriggers, showMessage} from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
+import { roomTriggers, brotherDialogue } from './scenes/room.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -179,17 +180,15 @@ function controls(deltaTime) {
   // Objects interaction
   if (keyStates['KeyE']) {
     showHUD();
-  }
-  // for reception
-  if (keyStates['KeyO'])
-  {
     if (currentRoom === 'reception') {
       showMessage();
     }
     if (currentRoom === 'corridor') {
       showCorridorMessage();
     }
-
+    if (currentRoom === 'room'){
+      brotherDialogue();
+    }
   }
 }
 
@@ -207,6 +206,9 @@ function checkTriggers() {
   }
   if (currentRoom === 'corridor') {
     corridorTriggers(playerBox);
+  }
+  if (currentRoom === 'room') {
+    roomTriggers(playerBox);
   }
 }
 
@@ -264,8 +266,8 @@ function loadRoom(roomFile) {
         camera.rotation.set(0, 0, 0);
       }
       else {
-        playerCollider.start.set(-4.7, 0.675, -4);
-        playerCollider.end.set(-4.7, 1.325, -4);
+        playerCollider.start.set(-4.7, 0.675, -3.5);
+        playerCollider.end.set(-4.7, 1.325, -3.5);
         camera.rotation.set(0, 180, 0);
       }
 
@@ -282,8 +284,9 @@ function loadRoom(roomFile) {
         camera.rotation.set(0, 180, 0);
       }
       else {
-        playerCollider.start.set(2.5, 0.675, 8);
-        playerCollider.end.set(2.5, 1.325, 8);
+        console.log('hello')
+        playerCollider.start.set(2.2, 0.675, -15);
+        playerCollider.end.set(2.2, 1.325, -15);
         camera.rotation.set(0, 0, 0);
       }
       camera.position.copy(playerCollider.end);
@@ -291,6 +294,13 @@ function loadRoom(roomFile) {
 
       // Call the functions from reception.js
       loadIdleInfected('idle-infected.glb', loader, scene, new THREE.Vector3(-2, 0, 3.5), new THREE.Vector3(0, 180, 0));
+    }
+    else if (roomFile === 'room.glb') {
+      playerCollider.start.set(0, 1, -2.6);
+      playerCollider.end.set(0, 1.65, -2.6);
+      camera.rotation.set(0, 180, 0);
+      camera.position.copy(playerCollider.end);
+      playerLight.position.copy(playerCollider.end);
     }
   },
     (progress) => {
@@ -336,7 +346,7 @@ if (!gameStarted) {
     hideIntroduction();
 
     // Initial room load
-    loadRoom('exterior.glb');
+    loadRoom(currentRoom + '.glb');
   });
 }
 

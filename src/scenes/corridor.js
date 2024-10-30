@@ -20,6 +20,7 @@ function showCorridorMessage() {
     }
     if (playerInGoodDoorTriggerZone) {
         hideText(openDoor);
+        loadNewRoom('room');
     }
     if (playerInZombieDoorTriggerZone) {
         hideText(openDoor);
