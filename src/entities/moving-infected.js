@@ -10,7 +10,7 @@ let actions;
 
 let isFallingBack = false;
 let isDead = false;
-const infectedSpeed = 4;
+const infectedSpeed = 2;
 
 // Animations names:
 // NOT USEFUL (animations that move the character on their own):
@@ -33,8 +33,9 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
         model = gltf.scene;
 
         // temporary manual positioning
-        model.position.z = -61;
-        model.position.x = -8;
+        model.position.x = -19;
+        model.position.z = 1.5;
+
 
         scene.add(model);
 
@@ -159,7 +160,7 @@ function infectedLoop(deltaTime, playerCollider) {
         return;
     }
     // Check for collision with player
-    if (playerCollider.start.distanceTo(model.position) < 1 && !isFallingBack) {
+    if (playerCollider.start.distanceTo(model.position) < 2 && !isFallingBack) {
         fromRunTofallBack();
         flashRed();
         isFallingBack = true;

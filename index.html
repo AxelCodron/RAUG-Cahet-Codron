@@ -12,11 +12,10 @@
 <body>
   <div id="container">
     <!-- Utils -->
-    <div id="blackscreen" class="blackscreen"></div>
-
-    <div id="damage-overlay" class="damage-overlay"></div>
-
     <div id="loader" class="loader"></div>
+    <div id="blackscreen" class="blackscreen"></div>
+    <div id="faded-screen" class="faded-screen"></div>
+    <div id="damage-overlay" class="damage-overlay"></div>
 
     <!-- Intro text -->
     <div id="intro-text" class="intro-text">
@@ -25,57 +24,81 @@
       <p class="subtitle">Press any key to start</p>
     </div>
 
-    <!-- Interactions -->
-    <div id="hud-text" class="hud-text">
-      You searched the corpse and found an eye
-    </div>
-    <div id="solved-code-text" class="hud-text">
-      You found the hospital key
-    </div>
-    <div id="interact-text" class="interact-text">
-      Press E to search the corpse
-    </div>
-    <div id ="drawer1-text" class="interact-text">
-      Press O to open the left drawer
-    </div>
-    <div id ="drawer2-text" class="interact-text">
-      Press O to open the right drawer 
-    </div>
-    <div id ="gooddrawer-text" class="interact-text">
-      Press O to open the center drawer
-    </div>
-    <div id ="good-text" class="interact-text">
-      You received a note, a bottle and a magnetic card
-    </div>
-    <div id ="bad-text" class="interact-text">
-      This drawer is locked
-    </div>
-    <div id ="searched-text" class="interact-text">
-      The drawer is now empty
-    </div>
-    <div id ="useCard-text" class="interact-text">
-      Press O to use the magnetic card
-    </div>
-    <div id ="dontOpen-text" class="interact-text">
-      This card don't seems to open this door...
-    </div>
-    <div id ="Open-text" class="interact-text">
-      The door is now open !
-    </div>
-    <div id ="openDoor-text" class="interact-text">
-      Press O to open the door
-    </div>
-    <div id ="closedDoor-text" class="interact-text">
-      The door is locked
-    </div>
-    <div id ="zombieDoor-text" class="interact-text">
-      Are you OK ??? Do you want to die ?
-    </div>
-
     <!-- Four digits code -->
     <div id="code-text" class="code-text">
       <span>Enter the code</span>
       <span id="code-input" class="code-input"></span>
+    </div>
+
+    <!-- Images for clues -->
+    <div id="corpse-timeline" class="image-clues">
+      <img src="assets/images/corpse-timeline.png" alt="corpse-timeline">
+    </div>
+    <div id="charles-note" class="image-clues">
+      <img src="assets/images/charles-note.png" alt="charles-note">
+    </div>
+    <div id="report" class="image-clues">
+      <img src="assets/images/report.png" alt="report">
+    </div>
+
+    <!-- HUD text -->
+    <div id="corpse-exam" class="hud-text">
+      The muscles are beginning to stiffen, the body is still warm
+    </div>
+    <div id="solved-code-text" class="hud-text">
+      You found the hospital key
+    </div>
+
+    <!-- Exterior interactions -->
+    <div id="corpse-text" class="interact-text">
+      Press E to examine the corpse
+    </div>
+    <div id="file-text" class="interact-text">
+      Press E to open the file
+    </div>
+    <div id="report-text" class="interact-text">
+      Press E to read the report
+    </div>
+    <div id="charles-note-text" class="interact-text">
+      Press E to read the paper
+    </div>
+
+    <!-- Interior interactions -->
+    <div id="drawer1-text" class="interact-text">
+      Press O to open the left drawer
+    </div>
+    <div id="drawer2-text" class="interact-text">
+      Press O to open the right drawer
+    </div>
+    <div id="gooddrawer-text" class="interact-text">
+      Press O to open the center drawer
+    </div>
+    <div id="good-text" class="interact-text">
+      You received a note, a bottle and a magnetic card
+    </div>
+    <div id="bad-text" class="interact-text">
+      This drawer is locked
+    </div>
+    <div id="searched-text" class="interact-text">
+      The drawer is now empty
+    </div>
+    <div id="useCard-text" class="interact-text">
+      Press O to use the magnetic card
+    </div>
+    <div id="dontOpen-text" class="interact-text">
+      This card don't seems to open this door...
+    </div>
+    <div id="Open-text" class="interact-text">
+      The door is now open !
+    </div>
+    <div id="openDoor-text" class="interact-text">
+      Press O to open the door
+    </div>
+    <div id="closedDoor-text" class="interact-text">
+      The door is locked
+    </div>
+    <div id="zombieDoor-text" class="interact-text">
+      Are you OK ??? Do you want to die ?
     </div>
   </div>
   <script type="module" src="./src/main.js"></script>

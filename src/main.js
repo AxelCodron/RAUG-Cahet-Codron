@@ -6,10 +6,10 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 
 // Local imports
 import { loadInfected, infectedLoop, removeInfected } from './entities/moving-infected.js';
-import { flickerNeonLight, loadNeonLight, exteriorTriggers, showHUD } from './scenes/exterior.js';
+import { flickerNeonLight, loadNeonLight, exteriorTriggers, interact } from './scenes/exterior.js';
 import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js';
 import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
-import { loadDrawer, receptionTriggers, showMessage} from './scenes/reception.js';
+import { loadDrawer, receptionTriggers, showMessage } from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
 
 // -------------------------------- Base setup --------------------------------
@@ -63,12 +63,6 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-  if (event.code === 'KeyE') {
-    showHUD(scene);
-  }
-});
-
-document.addEventListener('keyup', (event) => {
   keyStates[event.code] = false;
 });
 
@@ -80,6 +74,13 @@ document.body.addEventListener('mousemove', (event) => {
   if (document.pointerLockElement === document.body) {
     camera.rotation.y -= event.movementX / 500;
     camera.rotation.x -= event.movementY / 500;
+  }
+});
+
+// Handle single clicks for interactions specifically
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyE') {
+    interact();
   }
 });
 
@@ -174,22 +175,15 @@ function controls(deltaTime) {
       playerVelocity.y = 15;
     }
   }
-  
 
-  // Objects interaction
-  if (keyStates['KeyE']) {
-    showHUD();
-  }
   // for reception
-  if (keyStates['KeyO'])
-  {
+  if (keyStates['KeyO']) {
     if (currentRoom === 'reception') {
       showMessage();
     }
     if (currentRoom === 'corridor') {
       showCorridorMessage();
     }
-
   }
 }
 
@@ -244,7 +238,7 @@ function loadRoom(roomFile) {
       loaderElement.style.visibility = 'hidden';
       blackScreenElement.style.visibility = 'hidden';
     }, 3000);
-    
+
     // Reset player position
     if (roomFile == 'exterior.glb') {
       playerCollider.start.set(0, 0.35, 0);
@@ -254,8 +248,6 @@ function loadRoom(roomFile) {
 
       // Call the functions from exterior.js
       loadNeonLight(scene);
-      loadInfected('moving-infected.glb', loader, scene);
-      loadIdleInfected('idle-infected.glb', loader, scene);
     }
     else if (roomFile === 'reception.glb') {
       if (precedentRoom === 'exterior') {
@@ -276,7 +268,7 @@ function loadRoom(roomFile) {
       loadDrawer('drawer.glb', loader, scene);
     }
     else if (roomFile === 'corridor.glb') {
-      if (precedentRoom === 'reception' ){
+      if (precedentRoom === 'reception') {
         playerCollider.start.set(2.2, 0.675, -15);
         playerCollider.end.set(2.2, 1.325, -15);
         camera.rotation.set(0, 180, 0);
@@ -323,6 +315,10 @@ function teleportPlayerIfOob() {
   }
 }
 
+function spawnInfected() {
+  loadInfected('moving-infected.glb', loader, scene);
+}
+
 // -------------------------------- Load the initial room --------------------------------
 
 const loader = new GLTFLoader().setPath('/assets/models/');
@@ -361,4 +357,4 @@ function animate() {
 }
 
 // exports
-export { loadNewRoom }
+export { loadNewRoom, spawnInfected }

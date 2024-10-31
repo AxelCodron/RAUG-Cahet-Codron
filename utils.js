@@ -1,3 +1,5 @@
+// File for debugging only, not used in the final game
+
 import Stats from 'three/addons/libs/stats.module.js';
 import { OctreeHelper } from 'three/addons/helpers/OctreeHelper.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
