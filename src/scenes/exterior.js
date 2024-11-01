@@ -7,24 +7,28 @@ import { clearCode, useCode } from '../utils/digits-code';
 
 // ------------------- Variables -------------------
 
+// Flag to track if the door key has been found
+let doorKeyFound = false;
+
 // Flags to track if player is inside the trigger
+let playerInDoorTriggerZone = false;
 let playerInCorpseTriggerZone = false;
 let playerInCodeTriggerZone = false;
 let playerInFileTriggerZone = false;
 let playerInReportTriggerZone = false;
 let playerInCharlesNoteTriggerZone = false;
 
-const corpseTrigger = new THREE.Box3(
-    // Min corner (xMin, yMin, zMin)
-    new THREE.Vector3(-31, 0, -28),
-    // Max corner (xMax, yMax, zMax)
-    new THREE.Vector3(-29, 2, -24)
-);
-
 // Door trigger
 const doorTrigger = new THREE.Box3(
-    new THREE.Vector3(-7.55, 0.1, -5.5),
-    new THREE.Vector3(-7.45, 3.9, 0.5)
+    // Min corner (xMin, yMin, zMin)
+    new THREE.Vector3(-7.55, 0, -5.5),
+    // Max corner (xMax, yMax, zMax)
+    new THREE.Vector3(-5, 3, 0.5)
+);
+
+const corpseTrigger = new THREE.Box3(
+    new THREE.Vector3(-31, 0, -28),
+    new THREE.Vector3(-29, 3, -24)
 );
 
 // Code trigger
@@ -54,13 +58,15 @@ const charlesNoteTrigger = new THREE.Box3(
 // -------------------------------- GUI --------------------------------
 
 // Texts for interactions
+const doorText = document.getElementById('door-text');
 const corpseText = document.getElementById('corpse-text');
 const fileText = document.getElementById('file-text');
 const reportText = document.getElementById('report-text');
 const charlesNoteText = document.getElementById('charles-note-text');
 const codeText = document.getElementById('code-text');
 
-// Corpse Exam
+// Examines
+const doorExam = document.getElementById('door-exam');
 const corpseExam = document.getElementById('corpse-exam');
 
 // Images
@@ -76,6 +82,16 @@ charlesNote.style.visibility = "hidden";
 
 // Function called when the player interacts with "E"
 function interact() {
+    if (playerInDoorTriggerZone) {
+        if (doorKeyFound) {
+            hideDoorText();
+            loadNewRoom("reception");
+            playerInDoorTriggerZone = false;
+        }
+        else {
+            showDoorExam();
+        }
+    }
     if (playerInCorpseTriggerZone) {
         showCorpseExam();
     }
@@ -109,6 +125,23 @@ function interact() {
             showCharlesNoteText();
         }
     }
+}
+
+// Door functions
+function showDoorExam() {
+    doorExam.style.visibility = "visible";
+}
+
+function hideDoorExam() {
+    doorExam.style.visibility = "hidden";
+}
+
+function showDoorText() {
+    doorText.style.visibility = "visible";
+}
+
+function hideDoorText() {
+    doorText.style.visibility = "hidden";
 }
 
 // Corpse functions
@@ -198,20 +231,43 @@ function removeCodeTrigger() {
     codeTrigger.makeEmpty();
 }
 
-// ------------------- Trigger Function -------------------
+// ------------------- Functions -------------------
 
+// Function called when the player finds the door key
+function getKey() {
+    doorKeyFound = true;
+}
+
+// Triggers function
 function exteriorTriggers(playerBox) {
+    // Check for door trigger collision
+    if (playerBox.intersectsBox(doorTrigger)) {
+        if (!playerInDoorTriggerZone) {
+            console.log("Entered the door trigger zone");
+            showDoorText();
+            playerInDoorTriggerZone = true;
+        }
+    }
+    else {
+        if (playerInDoorTriggerZone) {
+            console.log("Exited the door trigger zone");
+            hideDoorText();
+            hideDoorExam();
+            playerInDoorTriggerZone = false;
+        }
+    }
+
     // Check for corpse trigger collision
     if (playerBox.intersectsBox(corpseTrigger)) {
         if (!playerInCorpseTriggerZone) {
-            console.log("Entered the trigger zone");
+            console.log("Entered the corpse trigger zone");
             showCorpseText();
             playerInCorpseTriggerZone = true;
         }
     }
     else {
         if (playerInCorpseTriggerZone) {
-            console.log("Exited the trigger zone");
+            console.log("Exited the corpse trigger zone");
             hideCorpseText();
             hideCorpseExam();
             playerInCorpseTriggerZone = false;
@@ -286,11 +342,6 @@ function exteriorTriggers(playerBox) {
             playerInCharlesNoteTriggerZone = false;
         }
     }
-
-    // Check for door trigger collision
-    if (playerBox.intersectsBox(doorTrigger)) {
-        loadNewRoom("reception");
-    }
 }
 
 // ------------------- Neon Light -------------------
@@ -320,4 +371,4 @@ function flickerNeonLight() {
     }
 }
 
-export { interact, exteriorTriggers, removeCodeTrigger, loadNeonLight, flickerNeonLight };
+export { interact, exteriorTriggers, removeCodeTrigger, loadNeonLight, flickerNeonLight, getKey };

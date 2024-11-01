@@ -12,6 +12,9 @@ let isFallingBack = false;
 let isDead = false;
 const infectedSpeed = 2;
 
+// Dialogue
+const infectedBite = document.getElementById('infected-bite');
+
 // Animations names:
 // NOT USEFUL (animations that move the character on their own):
 // walk with arms: Walk
@@ -32,10 +35,9 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
     loader.load(infectedFile, (gltf) => {
         model = gltf.scene;
 
-        // temporary manual positioning
+        // Manual positioning
         model.position.x = -19;
         model.position.z = 1.5;
-
 
         scene.add(model);
 
@@ -75,6 +77,7 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
     });
 }
 
+// Animation transitions
 function fromIdleToWalk() {
     prepareCrossFade(idleAction, walkAction, 0.5);
 }
@@ -174,6 +177,10 @@ function infectedLoop(deltaTime, playerCollider) {
                 isFallingBack = false;
                 isDead = true;
                 console.log("Infected is dead");
+                infectedBite.style.visibility = 'visible';
+                setTimeout(() => {
+                    infectedBite.style.visibility = 'hidden';
+                }, 5000);
             }
         }
         return;
@@ -211,11 +218,11 @@ function removeInfected() {
                 }
             }
         });
-        
+
         if (model.parent) {
             model.parent.remove(model);
         }
-        
+
         model = null;
     }
 

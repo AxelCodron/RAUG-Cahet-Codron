@@ -1,5 +1,5 @@
 import { spawnInfected } from "../main";
-import { removeCodeTrigger } from "../scenes/exterior";
+import { getKey, removeCodeTrigger } from "../scenes/exterior";
 
 const validCode = "2231";
 
@@ -37,6 +37,7 @@ function keyHandler(event) {
             console.log('Code accepted');
             codeInput.innerText = 'Correct!';
             solvedCodeText.style.visibility = 'visible';
+            getKey();
             spawnInfected();
             setTimeout(() => {
                 removeCodeTrigger();

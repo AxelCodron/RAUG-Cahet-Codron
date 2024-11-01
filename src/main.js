@@ -51,6 +51,31 @@ const keyStates = {};
 let currentRoom = 'exterior';
 let precedentRoom = 'exterior'
 
+// ------------------------------------ Music ------------------------------------
+
+// Listener and audio loader
+const listener = new THREE.AudioListener();
+camera.add(listener);
+const audioLoader = new THREE.AudioLoader();
+
+// Background music
+const exteriorBackgroundMusic = new THREE.Audio(listener);
+
+audioLoader.load('assets/musics/abadoned-pyramid-atmo-orchestral-and-drone-sad-mood-9237.mp3', (buffer) => {
+  exteriorBackgroundMusic.setBuffer(buffer);
+  exteriorBackgroundMusic.setLoop(true);
+  exteriorBackgroundMusic.setVolume(0.2);
+});
+
+function playExteriorBackgroundMusic() {
+  exteriorBackgroundMusic.play();
+}
+
+function stopBackgroundMusic() {
+  exteriorBackgroundMusic.stop();
+  // TODO: Add other background music stop here
+}
+
 // ------------------------------------ GUI ------------------------------------
 
 const loaderElement = document.getElementById('loader');
@@ -239,6 +264,9 @@ function loadRoom(roomFile) {
       blackScreenElement.style.visibility = 'hidden';
     }, 3000);
 
+    // Stop the background music
+    stopBackgroundMusic();
+
     // Reset player position
     if (roomFile == 'exterior.glb') {
       playerCollider.start.set(0, 0.35, 0);
@@ -247,6 +275,7 @@ function loadRoom(roomFile) {
       camera.rotation.set(0, 0, 0);
 
       // Call the functions from exterior.js
+      playExteriorBackgroundMusic();
       loadNeonLight(scene);
     }
     else if (roomFile === 'reception.glb') {

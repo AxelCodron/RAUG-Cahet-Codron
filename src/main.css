@@ -12,6 +12,21 @@ body {
 }
 
 /* game text */
+.dialogue {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  position: absolute;
+  color: white;
+  font-size: 30px;
+  z-index: 1;
+  pointer-events: none;
+  visibility: hidden;
+  font-family:'Franklin Gothic Medium', sans-serif;
+}
+
 .hud-text {
   height: 100%;
   width: 100%;
@@ -40,6 +55,7 @@ body {
   z-index: 1;
   pointer-events: none;
   visibility: hidden;
+  font-family: sans-serif;
 }
 
 .code-text {
