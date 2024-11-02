@@ -4,7 +4,7 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
     clearScreen: false,
-    base: './',
+    base: '/RAUG-Cahet-Codron/',
     
     build: {
         sourcemap: true,
