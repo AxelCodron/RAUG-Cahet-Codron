@@ -48,7 +48,7 @@ let playerOnFloor = false;
 
 const keyStates = {};
 
-const loader = new GLTFLoader().setPath('/assets/models/');
+const loader = new GLTFLoader().setPath('./assets/models/');
 
 // Loading state
 let isLoading = false;

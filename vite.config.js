@@ -4,39 +4,44 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
     clearScreen: false,
-    base: '/RAUG-Cahet-Codron/',
+    base: './',
     
     build: {
         sourcemap: true,
         outDir: 'dist',
         assetsDir: 'assets',
+        minify: 'esbuild',
         rollupOptions: {
             output: {
-                manualChunks: {
-                    three: ['three']
-                },
-                // Ensure proper paths for imports
-                paths: {
-                    'three': './assets/js/three.module.js',
-                },
-                // Format modules as ES
-                format: 'es'
+                manualChunks: (id) => {
+                    if (id.includes('node_modules/three/')) {
+                        if (id.includes('examples/jsm/')) {
+                            return 'three.examples';
+                        }
+                        return 'three.core';
+                    }
+                }
             }
         }
     },
 
     resolve: {
         alias: {
-            'three': '/node_modules/three/build/three.module.js',
-            '@three/examples': '/node_modules/three/examples/jsm'
+            'three': 'three',
+            'three/addons/': 'three/examples/jsm/',
+            '@three/examples/': 'three/examples/jsm/'
         }
     },
 
     optimizeDeps: {
-        include: ['three']
+        include: [
+            'three',
+            'three/examples/jsm/controls/OrbitControls',
+            'three/examples/jsm/loaders/GLTFLoader',
+            'three/examples/jsm/loaders/DRACOLoader'
+        ]
     },
 
-    // Rest of your config remains the same...
     plugins: [
         viteStaticCopy({
             targets: [
@@ -50,5 +55,10 @@ export default defineConfig({
             hook: 'buildEnd'
         }),
         glsl()
-    ]
+    ],
+
+    server: {
+        host: true,
+        port: 3000
+    }
 })
