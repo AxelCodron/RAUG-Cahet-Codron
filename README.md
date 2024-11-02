@@ -15,7 +15,10 @@ You arrive at an hospital looking for your little brother who didn't come back. 
 Use ZQSD or WASD to move, E to interact, and enter to progress in dialogues.
 
 # Photos of gameplay
-![ ](image.png)
+![ ](public/gameplay-images/hospital.png)
+![ ](public/gameplay-images/corpse.png)
+![ ](public/gameplay-images/reception.png)
+![ ](public/gameplay-images/corridor.png)
 
 # Copyrights
 This game is based from the "fps" example of the three.js official website by mrdoob:
