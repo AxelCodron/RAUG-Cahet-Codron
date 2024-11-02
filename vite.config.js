@@ -4,71 +4,39 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
     clearScreen: false,
-    base: './',
+    base: '/RAUG-Cahet-Codron/',
     
     build: {
         sourcemap: true,
         outDir: 'dist',
         assetsDir: 'assets',
-        minify: 'esbuild',
-        // Increase the warning limit since Three.js is naturally large
-        chunkSizeWarningLimit: 1000,
         rollupOptions: {
             output: {
-                // Improved chunk splitting strategy
-                manualChunks: (id) => {
-                    if (id.includes('node_modules/three/')) {
-                        if (id.includes('examples/jsm/')) {
-                            return 'three.examples';
-                        }
-                        return 'three.core';
-                    }
-                    if (id.includes('node_modules/')) {
-                        return 'vendor';
-                    }
+                manualChunks: {
+                    three: ['three']
                 },
-                // Organized output structure
-                chunkFileNames: (chunkInfo) => {
-                    const prefix = chunkInfo.name.includes('three') ? 'three/' : 'js/';
-                    return `assets/${prefix}[name]-[hash].js`;
+                // Ensure proper paths for imports
+                paths: {
+                    'three': './assets/js/three.module.js',
                 },
-                entryFileNames: 'assets/js/[name]-[hash].js',
-                assetFileNames: (assetInfo) => {
-                    const extType = assetInfo.name.split('.').at(1);
-                    if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-                        return 'assets/images/[name]-[hash][extname]';
-                    }
-                    if (/wasm/i.test(extType)) {
-                        return 'assets/wasm/[name]-[hash][extname]';
-                    }
-                    return 'assets/[ext]/[name]-[hash][extname]';
-                }
+                // Format modules as ES
+                format: 'es'
             }
-        },
-        target: 'esnext',
-        // Additional esbuild optimization options
-        esbuild: {
-            legalComments: 'none',
-            treeShaking: true,
         }
     },
 
-    server: {
-        open: true,
-        host: true,
-        port: 3000,
-        cors: true,
-        headers: {
-            'Cross-Origin-Opener-Policy': 'same-origin',
-            'Cross-Origin-Embedder-Policy': 'require-corp'
+    resolve: {
+        alias: {
+            'three': '/node_modules/three/build/three.module.js',
+            '@three/examples': '/node_modules/three/examples/jsm'
         }
     },
 
     optimizeDeps: {
-        include: ['three'],
-        exclude: ['vite-plugin-glsl']
+        include: ['three']
     },
 
+    // Rest of your config remains the same...
     plugins: [
         viteStaticCopy({
             targets: [
@@ -81,28 +49,6 @@ export default defineConfig({
             ],
             hook: 'buildEnd'
         }),
-        glsl({
-            include: [
-                '**/*.glsl',
-                '**/*.vert',
-                '**/*.frag'
-            ],
-            exclude: 'node_modules/**',
-            warnDuplicatedImports: true,
-            defaultExtension: 'glsl',
-            compress: false,
-            watch: true
-        })
-    ],
-
-    define: {
-        'process.env': {}
-    },
-
-    resolve: {
-        alias: {
-            '@': '/src',
-            'three-examples': 'three/examples/jsm'
-        }
-    }
+        glsl()
+    ]
 })
