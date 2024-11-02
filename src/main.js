@@ -48,12 +48,17 @@ let playerOnFloor = false;
 
 const keyStates = {};
 
+const loader = new GLTFLoader().setPath('/assets/models/');
+
 // Loading state
 let isLoading = false;
 
 // Current room state
 let currentRoom = 'exterior';
 let precedentRoom = 'exterior';
+
+// Cuurent game state
+let gameStarted = false;
 
 // ------------------------------------ GUI ------------------------------------
 
@@ -339,9 +344,6 @@ function spawnInfected() {
 }
 
 // -------------------------------- Load the initial room --------------------------------
-
-const loader = new GLTFLoader().setPath('/assets/models/');
-let gameStarted = false;
 
 addListenerToCamera(camera);
 

@@ -138,7 +138,9 @@ function playCorpseNoise() {
 }
 
 function playFootsteps() {
-    footsteps.play();
+    if (!footsteps.isPlaying) {
+        footsteps.play();
+    }
 }
 
 function pauseFootsteps() {
