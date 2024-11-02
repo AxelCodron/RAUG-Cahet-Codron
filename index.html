@@ -15,10 +15,10 @@
       }
     }
     </script>
-  <script type="module" crossorigin src="/RAUG-Cahet-Codron/assets/index-OYv_Slzt.js"></script>
+  <script type="module" crossorigin src="/RAUG-Cahet-Codron/assets/index-Ble-wNRl.js"></script>
   <link rel="modulepreload" crossorigin href="/RAUG-Cahet-Codron/assets/three.core-DF9gDMDL.js">
   <link rel="modulepreload" crossorigin href="/RAUG-Cahet-Codron/assets/three.examples-B3IXmiTy.js">
-  <link rel="stylesheet" crossorigin href="/RAUG-Cahet-Codron/assets/index-zdKaIxMw.css">
+  <link rel="stylesheet" crossorigin href="/RAUG-Cahet-Codron/assets/index-G4id9L9W.css">
 </head>
 
 <body>
@@ -28,10 +28,13 @@
     <div id="blackscreen" class="blackscreen"></div>
     <div id="faded-screen" class="faded-screen"></div>
     <div id="damage-overlay" class="damage-overlay"></div>
+    <div id="loader" class="loader"></div>
+    <div id="blur" class="blur"></div>
 
     <!-- Intro text -->
     <div id="intro-text" class="intro-text">
-      <p>You haven't had news of your little brother since he went to the hospital... You decided to look for him there.
+      <p>
+        You haven't had news of your little brother since he went to the hospital... You decided to look for him there.
       </p>
       <p class="subtitle">Press any key to start</p>
     </div>
@@ -85,19 +88,37 @@
     <div id="charles-note-text" class="interact-text">
       Press E to read the paper
     </div>
+    <div id="exit-prompt" class="exit-button" style="display: none;">
+      Press E to exit.
+    </div>
+
+    <!-- Four digits code -->
+    <div id="code-text" class="code-text">
+      <span>Enter the code</span>
+      <span id="code-input" class="code-input"></span>
+    </div>
 
     <!-- Interior interactions -->
     <div id="drawer1-text" class="interact-text">
-      Press O to open the left drawer
+      Press E to open the left drawer
     </div>
     <div id="drawer2-text" class="interact-text">
-      Press O to open the right drawer
-    </div>
-    <div id="gooddrawer-text" class="interact-text">
-      Press O to open the center drawer
+      Press E to open the right drawer
     </div>
     <div id="good-text" class="interact-text">
       You received a note, a bottle and a magnetic card
+    </div>
+    <div id="gooddrawer-text" class="interact-text">
+      Press E to open the center drawer
+    </div>
+    <div id="items-container" style="display: none;" class="items-container">
+      <img id="itemsImage" src="assets/images/items.png" class="items-image" alt="Items Image">
+      <div id="exit-prompt" class="exit-button">
+        Press E to exit.
+      </div>
+      <div id="good-text" class="interact-text">
+        You received a note, a bottle and a magnetic card
+      </div>
     </div>
     <div id="bad-text" class="interact-text">
       This drawer is locked
@@ -106,7 +127,13 @@
       The drawer is now empty
     </div>
     <div id="useCard-text" class="interact-text">
-      Press O to use the magnetic card
+      Press E to use the magnetic card
+    </div>
+    <div id="noCard-text" class="interact-text">
+      It seems this door can be open with a magnetic card
+    </div>
+    <div id="useCard-text" class="interact-text">
+      Press E to use the magnetic card
     </div>
     <div id="dontOpen-text" class="interact-text">
       This card don't seems to open this door...
@@ -115,7 +142,7 @@
       The door is now open !
     </div>
     <div id="openDoor-text" class="interact-text">
-      Press O to open the door
+      Press E to open the door
     </div>
     <div id="closedDoor-text" class="interact-text">
       The door is locked
@@ -123,7 +150,29 @@
     <div id="zombieDoor-text" class="interact-text">
       Are you OK ??? Do you want to die ?
     </div>
-  </div>
+    <div id="launchDialogue-text" class="interact-text">
+      Press space to talk to your brother.
+    </div>
+
+    <!-- Dialogue Overlay -->
+    <div id="dialogue-container" class="dialogue-container" style="display: none;">
+      <!-- Character Image -->
+      <img id="character-image" class="character-image" src="assets/images/brother.png" alt="Character">
+
+      <!-- Dialogue Box -->
+      <div class="dialogue-box">
+        <div id="dialogue-speaker" class="dialogue-speaker"></div>
+        <div id="dialogue-text" class="dialogue-text"></div>
+        <div class="enter-text">Space</div>
+      </div>
+    </div>
+
+    <!-- black background for Pause -->
+    <div id="pause-overlay" class="pause-overlay" style="display: none;">
+      <div id="pause-text" class="intro-text"></div>
+    </div>
+  </div>
+  <!-- Script -->
 </body>
 
 </html>
