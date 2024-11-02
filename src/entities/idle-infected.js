@@ -23,7 +23,7 @@ function loadIdleInfected(infectedFile, loader, scene, position = new THREE.Vect
         // Sound for the infected
         addSoundToInfected(model);
         playInfectedSound();
-        
+
         scene.add(model);
 
         model.traverse(function (object) {

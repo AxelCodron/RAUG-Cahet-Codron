@@ -10,7 +10,7 @@ function flashRed() {
         overlay.classList.add('fade-out');
         setTimeout(() => {
             overlay.classList.remove('fade-out');
-        },1000);
+        }, 1000);
     }, 200);
 }
 

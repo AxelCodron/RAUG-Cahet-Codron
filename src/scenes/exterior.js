@@ -9,7 +9,7 @@ import { addSoundToLamp, playCorpseNoise, playDoorSound, playLockedDoorSound, pl
 // ------------------- Variables -------------------
 
 // Flag to track if the door key has been found
-let doorKeyFound = true;
+let doorKeyFound = false;
 
 // Flags to track if player is inside the trigger
 let playerInDoorTriggerZone = false;
@@ -381,7 +381,7 @@ neonLight.position.set(-8, 2.4, -60)
 function loadNeonLight(scene) {
     // Add sound effect
     addSoundToLamp(neonLight);
-    
+
     scene.add(neonLight)
 }
 

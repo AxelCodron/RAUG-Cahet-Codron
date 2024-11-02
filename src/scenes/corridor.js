@@ -37,7 +37,7 @@ function hideMessage() {
 function displayText(object) {
     object.style.visibility = "visible";
 }
-  
+
 function hideText(object) {
     object.style.visibility = "hidden";
 }
@@ -87,8 +87,7 @@ const receptionDoorTrigger = new THREE.Box3(
 
 const doorArray = [Door1Trigger, Door2Trigger, Door3Trigger, Door4Trigger, Door5Trigger, Door6Trigger, Door7Trigger]
 
-function intersectobject(playerBox, Trigger, inTrigger, text)
-{
+function intersectobject(playerBox, Trigger, inTrigger, text) {
     if (playerBox.intersectsBox(Trigger)) {
         if (!inTrigger) {
             console.log("Entered the trigger zone");
@@ -107,8 +106,7 @@ function intersectobject(playerBox, Trigger, inTrigger, text)
     return inTrigger;
 }
 
-function intersectMultipleObject(playerBox, Triggers, inTrigger, text)
-{
+function intersectMultipleObject(playerBox, Triggers, inTrigger, text) {
     let intersect = false;
     for (const Trigger of Triggers) {
         if (playerBox.intersectsBox(Trigger)) {

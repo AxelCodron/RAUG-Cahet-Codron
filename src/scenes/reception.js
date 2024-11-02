@@ -30,7 +30,7 @@ let playerInRightDoorTriggerZone = false;
 let playerInLeftDoorTriggerZone = false;
 let animateDrawer = false;
 let itemsOn = false;
-let leftDoorOpen = false; 
+let leftDoorOpen = false;
 let model;
 
 function showMessage() {
@@ -54,11 +54,11 @@ function showMessage() {
         hideText(searchedText);
         hideMessage();
     }
-    if (playerInRightDoorTriggerZone & itemsOn){
+    if (playerInRightDoorTriggerZone & itemsOn) {
         hideText(useCardText);
         displayText(dontOpenText);
     }
-    if (playerInLeftDoorTriggerZone & itemsOn){
+    if (playerInLeftDoorTriggerZone & itemsOn) {
         hideText(useCardText);
         leftDoorOpen = true;
     }
@@ -75,10 +75,10 @@ function hideMessage() {
         blurred.style.display = 'none';
 
     }
-    if (playerInRightDoorTriggerZone){
+    if (playerInRightDoorTriggerZone) {
         hideText(dontOpenText);
     }
-    if (playerInLeftDoorTriggerZone){
+    if (playerInLeftDoorTriggerZone) {
         hideText(openText);
     }
 }
@@ -133,8 +133,7 @@ const leftDoorTrigger = new THREE.Box3(
 
 //doorTriggerMesh.position.copy(interiorDoorTrigger.getCenter(new THREE.Vector3()));
 
-function intersectobject(playerBox, Trigger, inTrigger, text)
-{
+function intersectobject(playerBox, Trigger, inTrigger, text) {
     if (playerBox.intersectsBox(Trigger)) {
         if (!inTrigger) {
             console.log("Entered the trigger zone");
@@ -190,7 +189,7 @@ function receptionTriggers(playerBox) {
     }
 
     if (animateDrawer) {
-        if (model.position.z > -0.9){
+        if (model.position.z > -0.9) {
             model.position.z -= 0.01;
         }
         else {

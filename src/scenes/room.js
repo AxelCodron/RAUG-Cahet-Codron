@@ -61,8 +61,8 @@ const selfish = [
 
 const victory = [
     { speaker: "Brother", text: "I can't take it, you came all the way here for me..." },
-    { speaker: "You", text: "You are my little brother. It's my duty to protect you."},
-    { speaker: "Pause", text: "Your brother took the remedy. While you helped him escape the hospital, he saw a locker looking quite familiar to him. It was Frederic's locker! You found an other dose of the remedy and escaped together safely.\nCongratulations!"}
+    { speaker: "You", text: "You are my little brother. It's my duty to protect you." },
+    { speaker: "Pause", text: "Your brother took the remedy. While you helped him escape the hospital, he saw a locker looking quite familiar to him. It was Frederic's locker! You found an other dose of the remedy and escaped together safely.\nCongratulations!" }
 ];
 
 let currentDialogue = dialogues;
@@ -84,7 +84,7 @@ function updateDialogue(currentDialogue) {
         dialogueContainer.style.display = 'none'; // Cache la boîte de dialogue normale
         pauseOverlay.style.display = 'flex';      // Affiche l'écran noir de pause
         pauseText.innerText = currentDialogue.text; // Affiche le texte en grand sur l'écran noir
-      }
+    }
     else {
         dialogueSpeaker.innerText = currentDialogue.speaker
         dialogueSpeaker.style.color = currentDialogue.speaker === "You" ? "green" : "#ffcc00"; // Vert si le joueur parle, jaune sinon
@@ -99,7 +99,7 @@ function showDialogue() {
     blurred.style.display = 'block';
     exitPrompt.style.display = 'block';
     pauseOverlay.style.display = 'none';
-    }
+}
 
 function hideDialogue() {
     launchDialogue.style.visibility = 'visible'
@@ -110,7 +110,7 @@ function hideDialogue() {
     pauseOverlay.style.display = 'none';
 }
 
-function brotherDialogue(){
+function brotherDialogue() {
     if (playerInBrotherTriggerZone & currentDialogueIndex < currentDialogue.length) {
         showDialogue();
         updateDialogue(currentDialogue[currentDialogueIndex]);
@@ -120,7 +120,7 @@ function brotherDialogue(){
     }
 }
 
-function exitDialogue(){
+function exitDialogue() {
     if (startDialogue) {
         hideDialogue();
     }
@@ -138,8 +138,7 @@ function finalDialogue(response) {
     }
 }
 
-function intersectobject(playerBox, Trigger, inTrigger, text)
-{
+function intersectobject(playerBox, Trigger, inTrigger, text) {
     if (playerBox.intersectsBox(Trigger)) {
         if (!inTrigger) {
             console.log("Entered the trigger zone");
@@ -158,7 +157,7 @@ function intersectobject(playerBox, Trigger, inTrigger, text)
 }
 
 function roomTriggers(playerBox) {
-    if (!startDialogue){
+    if (!startDialogue) {
         // Check for door trigger collision
         if (playerBox.intersectsBox(corridorDoorTrigger)) {
             loadNewRoom("corridor");
