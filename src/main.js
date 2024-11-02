@@ -269,7 +269,7 @@ function loadRoom(roomFile) {
       camera.position.copy(playerCollider.end);
       camera.rotation.set(0, 0, 0);
 
-      // Call the functions from exterior.js
+      // Call the functions for exterior.js
       playExteriorBackgroundMusic();
       loadNeonLight(scene);
     }
@@ -288,7 +288,7 @@ function loadRoom(roomFile) {
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
 
-      // Call the functions from reception.js
+      // Call the functions for reception.js
       loadDrawer('drawer.glb', loader, scene);
     }
     else if (roomFile === 'corridor.glb') {
