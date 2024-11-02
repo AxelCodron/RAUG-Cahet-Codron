@@ -6,10 +6,19 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>three_vite</title>
   <link rel="icon" href="favicon.png">
-  <script type="module" crossorigin src="./assets/js/index-BHtD4I36.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/three/three.core-DF9gDMDL.js">
-  <link rel="modulepreload" crossorigin href="./assets/three/three.examples-B3IXmiTy.js">
-  <link rel="stylesheet" crossorigin href="./assets/css/index-CCo3pD4c.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./assets/js/three-module.js",
+        "three/examples/": "./assets/js/examples/"
+      }
+    }
+    </script>
+  <script type="module" crossorigin src="/RAUG-Cahet-Codron/assets/index-Bte0YsHh.js"></script>
+  <link rel="modulepreload" crossorigin href="/RAUG-Cahet-Codron/assets/three.core-DF9gDMDL.js">
+  <link rel="modulepreload" crossorigin href="/RAUG-Cahet-Codron/assets/three.examples-B3IXmiTy.js">
+  <link rel="stylesheet" crossorigin href="/RAUG-Cahet-Codron/assets/index-zdKaIxMw.css">
 </head>
 
 <body>
