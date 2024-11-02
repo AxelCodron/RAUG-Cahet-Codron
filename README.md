@@ -19,6 +19,7 @@ Use ZQSD or WASD to move, E to interact, and enter to progress in dialogues.
 ![ ](public/gameplay-images/corpse.png)
 ![ ](public/gameplay-images/reception.png)
 ![ ](public/gameplay-images/corridor.png)
+![ ](public/gameplay-images/room.png)
 
 # Copyrights
 This game is based from the "fps" example of the three.js official website by mrdoob:
@@ -45,11 +46,17 @@ Locker: https://skfb.ly/6xGqV
 Tablet folder: https://skfb.ly/6Sw8z
 
 ### Reception
-TODO
+Reception : https://skfb.ly/oG98U
+Drawer : https://skfb.ly/6TXRV
 
 ### Corridor
-Infected (idle): https://skfb.ly/oDLzO
-TODO
+Corridor : https://skfb.ly/6TTqv
+Infected (idle) : https://skfb.ly/oDLzO
+Supplies : https://skfb.ly/oBGIT
+
+### Room
+Room : https://skfb.ly/oXRNU
+Brother : https://skfb.ly/oQnnK
 
 ## Musics
 Background exterior music by szegvaria from Pixabay:
