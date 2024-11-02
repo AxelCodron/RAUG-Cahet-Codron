@@ -1,88 +1,80 @@
-# three_vite
-Basic THREE.js template using [Vite](https://vitejs.dev).
+# Link to play the game
+https://axelcodron.github.io/RAUG-Cahet-Codron/
 
-Allows testing and modifying [official THREE.js examples](https://threejs.org/examples/) locally, at lightning speed.
-After trying Parcel and Rollup, this is probably the most developer-friendly to start THREE.js development in 2023 : it's insanely fast, it supports live reload out of the box, while remaining simple to use and to extend.
+# Authors
+Enora Cahet: Interior gameplay and design.
 
-## Batteries included
+Axel Codron: Base setup, exterior gameplay and design.
 
-Pre-configured to support :
+# Plot
+**⚠️ Even if the graphics are simple, this is a horror themed game ⚠️**
 
-- glTF file loading
-- ammo.js wasm physics library
-- VSCode launch scripts
-- THREE.js type definitions : for IntelliSense in VS Code
+You arrive at an hospital looking for your little brother who didn't come back. However, you found no one there, except for strange creatures...
 
-Have a look at vite.config.js and customize it to your needs (additional libraries, file formats etc.).
+# Controls
+Use ZQSD or WASD to move, E to interact, and enter to progress in dialogues.
 
-## Installation
+# Photos of gameplay
+![ ](public/gameplay-images/hospital.png)
+![ ](public/gameplay-images/corpse.png)
+![ ](public/gameplay-images/reception.png)
+![ ](public/gameplay-images/corridor.png)
 
-Install [Node.js](https://nodejs.org)
+# Copyrights
+This game is based from the "fps" example of the three.js official website by mrdoob:
+https://threejs.org/examples/?q=fps#games_fps
 
-- Clone or download repo
-- run `npm install` : fetches and install all dependencies
-- `npm run build` : packages all code and resources into the `dist` folder
-- `npm run dev` : launches a server and opens your browser in `https://localhost:5173` by default
-- Edit your code : your changes are reflected instantly!
+## Fonts
+ZOMBIE font by Patrick Broderick.
 
-## HTTPS
+## Images
+Produced by the authors of this project: Enora Cahet and Axel Codron.
 
-HTTPS is required to use some features such as the WebXR API
+## Models
+All used models are from Sketchfab.
 
+### Exterior
+Hospital exterior: https://skfb.ly/oKpXu
+Lampost: https://skfb.ly/oVt6A
+Ceiling lamp: https://skfb.ly/ouOVD
+Corpse: https://skfb.ly/ooAnK
+Paper: https://skfb.ly/6WOZU
+Post it: https://skfb.ly/oFrKV
+Infected (moving): https://skfb.ly/6BKSF
+Locker: https://skfb.ly/6xGqV
+Tablet folder: https://skfb.ly/6Sw8z
 
-### Using Cloudflare Tunnel for free without a domain (recommended)
+### Reception
+TODO
 
-  - Install [Homebrew](https://brew.sh)
+### Corridor
+Infected (idle): https://skfb.ly/oDLzO
+TODO
 
-```bash
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+## Musics
+Background exterior music by szegvaria from Pixabay:
+https://pixabay.com/fr/users/szegvaria-9048476/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=9237
 
-then follow instructions
-
-
-```bash
-echo >> /Users/XXX/.zprofile
-
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/XXX/.zprofile
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-  - **[Install `cloudflared`](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)**
-
-```bash
-brew install cloudflared
-```
-- run your app locally
-
-```bash
-npm run dev
-```
-
-- run `cloudflared` tunnel
-
-```bash
-cloudflared --url http://localhost:5173/
-```
-
-This will create a random temporary address ending in `*.trycloudflare.com`
-
-You can share this address by sending a link or by generating a QR code (very useful for mobile devices and some XR headsets).
-
-### Persistent link
-
-If you want more persistence, you should register a domain name, or connect your github account to [Cloudflare Pages](https://pages.cloudflare.com) for free.
-
-Alternatively, you could simply [use GitHub Pages to host your application persistently](https://sbcode.net/threejs/github-pages/).
-
-### Tunneling alternatives
-
-Check these tunneling alternatives such as `ngrok` or `zrok` for simple personal projects, use [tunneling solutions](https://github.com/anderspitman/awesome-tunneling) 
-
-
-### Manual HTTPS setup
-
-In order to use `https`, copy your certificates to the `.cert` folder, and change the `serve` command to:
-
-`"serve": "http-server dist -S -C .cert/cert.pem -K .cert/key.pem`
+## Sound effects
+Bite scare effect by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=47561
+Shepard tone by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=59283
+Scary violins by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=59283
+Moving Zombie by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=22336
+Zombie bite by Pixabay:
+https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=96528
+Paper noise by u_go9pkxdnu9 from Pixabay:
+https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=245786
+Door noise by Pixabay:
+https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=44280
+Locked Door noise by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=79921
+Bag noise by Pixabay:
+https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=95101
+Footsteps by Pixabay:
+https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=39202
+Lamp noise by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=17625

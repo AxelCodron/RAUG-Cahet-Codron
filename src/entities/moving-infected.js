@@ -2,6 +2,7 @@
 
 import * as THREE from 'three';
 import { flashRed } from '../utils/shake-camera';
+import { addSoundToInfected, stopInfectedChase } from '../utils/sounds';
 
 let model, mixer;
 
@@ -10,7 +11,10 @@ let actions;
 
 let isFallingBack = false;
 let isDead = false;
-const infectedSpeed = 4;
+const infectedSpeed = 2;
+
+// Dialogue
+const infectedBite = document.getElementById('infected-bite');
 
 // Animations names:
 // NOT USEFUL (animations that move the character on their own):
@@ -32,9 +36,12 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
     loader.load(infectedFile, (gltf) => {
         model = gltf.scene;
 
-        // temporary manual positioning
-        model.position.z = -61;
-        model.position.x = -8;
+        // Manual positioning
+        model.position.x = -19;
+        model.position.z = 1.5;
+
+        // Sound for the infected
+        addSoundToInfected(model);
 
         scene.add(model);
 
@@ -74,6 +81,7 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
     });
 }
 
+// Animation transitions
 function fromIdleToWalk() {
     prepareCrossFade(idleAction, walkAction, 0.5);
 }
@@ -159,7 +167,8 @@ function infectedLoop(deltaTime, playerCollider) {
         return;
     }
     // Check for collision with player
-    if (playerCollider.start.distanceTo(model.position) < 1 && !isFallingBack) {
+    if (playerCollider.start.distanceTo(model.position) < 2 && !isFallingBack) {
+        stopInfectedChase();
         fromRunTofallBack();
         flashRed();
         isFallingBack = true;
@@ -173,6 +182,10 @@ function infectedLoop(deltaTime, playerCollider) {
                 isFallingBack = false;
                 isDead = true;
                 console.log("Infected is dead");
+                infectedBite.style.visibility = 'visible';
+                setTimeout(() => {
+                    infectedBite.style.visibility = 'hidden';
+                }, 5000);
             }
         }
         return;
@@ -210,11 +223,11 @@ function removeInfected() {
                 }
             }
         });
-        
+
         if (model.parent) {
             model.parent.remove(model);
         }
-        
+
         model = null;
     }
 

@@ -12,12 +12,28 @@ body {
 }
 
 /* game text */
+.dialogue {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  position: absolute;
+  color: white;
+  font-size: 30px;
+  z-index: 1;
+  pointer-events: none;
+  visibility: hidden;
+  font-family:'Franklin Gothic Medium', sans-serif;
+}
+
 .hud-text {
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   position: absolute;
   color: white;
   font-size: 50px;
@@ -39,6 +55,7 @@ body {
   z-index: 1;
   pointer-events: none;
   visibility: hidden;
+  font-family: sans-serif;
 }
 
 .code-text {
@@ -81,6 +98,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -93,6 +111,17 @@ body {
   width: 100%;
   height: 100%;
   background-color: black;
+}
+
+/* faded screen */
+.faded-screen {
+  visibility: hidden;
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.6;
 }
 
 /* damage effect */
@@ -132,6 +161,20 @@ body {
   }
 }
 
+/* Imaged clues */
+.image-clues {
+  visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 3;
+
+  img {
+    margin: auto;
+    max-height: 95%;
+  }
+}
 /* Dialogue Container styles */
 .dialogue-container {
   position: absolute;
