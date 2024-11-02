@@ -1,9 +1,11 @@
 # Authors
 Enora Cahet: Interior gameplay and design.
+
 Axel Codron: Base setup, exterior gameplay and design.
 
 # Plot
 **⚠️ Even if the graphics are simple, this is a horror themed game ⚠️**
+
 You arrive at an hospital looking for your little brother who didn't come back. However, you found no one there, except for strange creatures...
 
 # Controls
