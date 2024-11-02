@@ -66,6 +66,7 @@ const keyPressed = {};
 
 const loaderElement = document.getElementById('loader');
 const blackScreenElement = document.getElementById('blackscreen');
+const loadingBar = document.querySelector('.loading-bar');
 
 // -------------------------------- Event listeners --------------------------------
 
@@ -224,22 +225,6 @@ function controls(deltaTime) {
   if (keyStates['KeyD'] && !isLoading) {
     playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
   }
-
-  // Jumping
-  // if (playerOnFloor) {
-  //   if (keyStates['Space']) {
-  //     playerVelocity.y = 15;
-  //   }
-  // }
-
-  // for reception
-  if (keyStates['KeyO']) {
-    if (playerOnFloor) {
-      if (keyStates['Space']) {
-        playerVelocity.y = 15;
-      }
-    }
-  }
 }
 
 function checkTriggers() {
@@ -298,6 +283,8 @@ function loadRoom(roomFile) {
       loaderElement.style.visibility = 'hidden';
       blackScreenElement.style.visibility = 'hidden';
       isLoading = false;
+
+      loadingBar.style.width = '0%';
     }, 3000);
 
     // Stop the background music
@@ -361,8 +348,12 @@ function loadRoom(roomFile) {
     }
   },
     (progress) => {
-      // Update progress if needed (e.g., progress bar, percentage)
-      console.log((progress.loaded / progress.total * 100) + '%');
+      // Update progress bar
+      const percentComplete = Math.round((progress.loaded / progress.total) * 100);
+
+      loadingBar.style.width = percentComplete + '%';
+
+      console.log(percentComplete + '%');
     },
     (error) => {
       // Handle errors in loading

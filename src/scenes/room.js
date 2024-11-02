@@ -33,7 +33,7 @@ const dialogues = [
     { speaker: "Brother", text: "We tried to leave the hospital but we were attacked, we got infected." },
     { speaker: "Brother", text: "I don't know why, but my symptoms took a lot longer than his to develop." },
     { speaker: "Brother", text: "While searching why I resisted to the infection, my doctor found an antidote." },
-    { speaker: "You", text: "Amazing! where is it??" },
+    { speaker: "You", text: "Amazing! Where is it??" },
     { speaker: "Brother", text: "That's the problem... Frederic didn't finish the antidote. He needed a last ingredient." },
     { speaker: "You", text: "Wait, Frederic? Is that the name of your doctor?" },
     { speaker: "Brother", text: "Yes, why?" },

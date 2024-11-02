@@ -12,7 +12,7 @@ Axel Codron: Base setup, exterior gameplay and design.
 You arrive at an hospital looking for your little brother who didn't come back. However, you found no one there, except for strange creatures...
 
 # Controls
-Use ZQSD or WASD to move, E to interact, and enter to progress in dialogues.
+Use ZQSD or WASD to move, E to interact, and space to progress in dialogues.
 
 # Photos of gameplay
 ![ ](public/gameplay-images/hospital.png)
