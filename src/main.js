@@ -11,7 +11,7 @@ import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js'
 import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 import { loadDrawer, receptionTriggers, showMessage } from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
-import { addListenerToCamera, playExteriorBackgroundMusic, stopBackgroundMusic } from './utils/sounds.js';
+import { addListenerToCamera, pauseFootsteps, playExteriorBackgroundMusic, playFootsteps, stopBackgroundMusic } from './utils/sounds.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -47,6 +47,9 @@ const playerDirection = new THREE.Vector3();
 let playerOnFloor = false;
 
 const keyStates = {};
+
+// Loading state
+let isLoading = false;
 
 // Current room state
 let currentRoom = 'exterior';
@@ -155,27 +158,35 @@ function controls(deltaTime) {
   // gives a bit of air control
   const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
 
-  if (keyStates['KeyW']) {
+  if ((keyStates['KeyW'] || keyStates['KeyS'] || keyStates['KeyA'] || keyStates['KeyD']) && !isLoading) {
+    playFootsteps();
+  }
+  else {
+    pauseFootsteps();
+  }
+
+  if (keyStates['KeyW'] && !isLoading) {
     playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
   }
 
-  if (keyStates['KeyS']) {
+  if (keyStates['KeyS'] && !isLoading) {
     playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
   }
 
-  if (keyStates['KeyA']) {
+  if (keyStates['KeyA'] && !isLoading) {
     playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
   }
 
-  if (keyStates['KeyD']) {
+  if (keyStates['KeyD'] && !isLoading) {
     playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
   }
 
-  if (playerOnFloor) {
-    if (keyStates['Space']) {
-      playerVelocity.y = 15;
-    }
-  }
+  // Jumping
+  // if (playerOnFloor) {
+  //   if (keyStates['Space']) {
+  //     playerVelocity.y = 15;
+  //   }
+  // }
 
   // for reception
   if (keyStates['KeyO']) {
@@ -212,6 +223,8 @@ function loadRoom(roomFile) {
   loaderElement.style.visibility = 'visible';
 
   loader.load(roomFile, (gltf) => {
+    isLoading = true;
+
     // Clear the current scene
     removeInfected();
     scene.clear();
@@ -238,6 +251,7 @@ function loadRoom(roomFile) {
     setTimeout(() => {
       loaderElement.style.visibility = 'hidden';
       blackScreenElement.style.visibility = 'hidden';
+      isLoading = false;
     }, 3000);
 
     // Stop the background music
