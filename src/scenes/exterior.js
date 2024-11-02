@@ -65,6 +65,7 @@ const fileText = document.getElementById('file-text');
 const reportText = document.getElementById('report-text');
 const charlesNoteText = document.getElementById('charles-note-text');
 const codeText = document.getElementById('code-text');
+const exitPrompt = document.getElementById('exit-prompt');
 
 // Examines
 const doorExam = document.getElementById('door-exam');
@@ -104,10 +105,12 @@ function interact() {
             playPaperSound();
             showFile();
             hideFileText();
+            showExitPrompt();
         }
         else {
             hideFile();
             showFileText();
+            hideExitPrompt();
         }
     }
     if (playerInReportTriggerZone) {
@@ -115,10 +118,12 @@ function interact() {
             playPaperSound();
             showReport();
             hideReportText();
+            showExitPrompt();
         }
         else {
             hideReport();
             showReportText();
+            hideExitPrompt();
         }
     }
     if (playerInCharlesNoteTriggerZone) {
@@ -126,12 +131,23 @@ function interact() {
             playPaperSound();
             showCharlesNote();
             hideCharlesNoteText();
+            showExitPrompt();
         }
         else {
             hideCharlesNote();
             showCharlesNoteText();
+            hideExitPrompt();
         }
     }
+}
+
+// Prompt the player to exit the game
+function showExitPrompt() {
+    exitPrompt.style.display = "block";
+}
+
+function hideExitPrompt() {
+    exitPrompt.style.display = "none";
 }
 
 // Door functions
@@ -260,6 +276,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the door trigger zone");
             hideDoorText();
             hideDoorExam();
+            hideExitPrompt();
             playerInDoorTriggerZone = false;
         }
     }
@@ -277,6 +294,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the corpse trigger zone");
             hideCorpseText();
             hideCorpseExam();
+            hideExitPrompt();
             playerInCorpseTriggerZone = false;
         }
     }
@@ -295,6 +313,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the code trigger zone");
             hideCodeText();
             clearCode();
+            hideExitPrompt();
             playerInCodeTriggerZone = false;
         }
     }
@@ -312,6 +331,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the file trigger zone");
             hideFileText();
             hideFile();
+            hideExitPrompt();
             playerInFileTriggerZone = false;
         }
     }
@@ -329,6 +349,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the report trigger zone");
             hideReportText();
             hideReport();
+            hideExitPrompt();
             playerInReportTriggerZone = false;
         }
     }
@@ -346,6 +367,7 @@ function exteriorTriggers(playerBox) {
             console.log("Exited the Charles note trigger zone");
             hideCharlesNoteText();
             hideCharlesNote();
+            hideExitPrompt();
             playerInCharlesNoteTriggerZone = false;
         }
     }
