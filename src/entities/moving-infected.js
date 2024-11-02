@@ -2,6 +2,7 @@
 
 import * as THREE from 'three';
 import { flashRed } from '../utils/shake-camera';
+import { addSoundToInfected, stopInfectedChase } from '../utils/sounds';
 
 let model, mixer;
 
@@ -38,6 +39,9 @@ function loadInfected(infectedFile, loader, scene, state = "Run_InPlace") {
         // Manual positioning
         model.position.x = -19;
         model.position.z = 1.5;
+
+        // Sound for the infected
+        addSoundToInfected(model);
 
         scene.add(model);
 
@@ -164,6 +168,7 @@ function infectedLoop(deltaTime, playerCollider) {
     }
     // Check for collision with player
     if (playerCollider.start.distanceTo(model.position) < 2 && !isFallingBack) {
+        stopInfectedChase();
         fromRunTofallBack();
         flashRed();
         isFallingBack = true;

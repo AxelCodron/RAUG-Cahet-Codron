@@ -1,5 +1,6 @@
 import { spawnInfected } from "../main";
 import { getKey, removeCodeTrigger } from "../scenes/exterior";
+import { playInfectedChase } from "./sounds";
 
 const validCode = "2231";
 
@@ -39,6 +40,7 @@ function keyHandler(event) {
             solvedCodeText.style.visibility = 'visible';
             getKey();
             spawnInfected();
+            playInfectedChase();
             setTimeout(() => {
                 removeCodeTrigger();
                 codeInput.innerText = '';

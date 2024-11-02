@@ -11,6 +11,7 @@ import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js'
 import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 import { loadDrawer, receptionTriggers, showMessage } from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
+import { addListenerToCamera, playExteriorBackgroundMusic, stopBackgroundMusic } from './utils/sounds.js';
 
 // -------------------------------- Base setup --------------------------------
 
@@ -49,32 +50,7 @@ const keyStates = {};
 
 // Current room state
 let currentRoom = 'exterior';
-let precedentRoom = 'exterior'
-
-// ------------------------------------ Music ------------------------------------
-
-// Listener and audio loader
-const listener = new THREE.AudioListener();
-camera.add(listener);
-const audioLoader = new THREE.AudioLoader();
-
-// Background music
-const exteriorBackgroundMusic = new THREE.Audio(listener);
-
-audioLoader.load('assets/musics/abadoned-pyramid-atmo-orchestral-and-drone-sad-mood-9237.mp3', (buffer) => {
-  exteriorBackgroundMusic.setBuffer(buffer);
-  exteriorBackgroundMusic.setLoop(true);
-  exteriorBackgroundMusic.setVolume(0.2);
-});
-
-function playExteriorBackgroundMusic() {
-  exteriorBackgroundMusic.play();
-}
-
-function stopBackgroundMusic() {
-  exteriorBackgroundMusic.stop();
-  // TODO: Add other background music stop here
-}
+let precedentRoom = 'exterior';
 
 // ------------------------------------ GUI ------------------------------------
 
@@ -352,6 +328,8 @@ function spawnInfected() {
 
 const loader = new GLTFLoader().setPath('/assets/models/');
 let gameStarted = false;
+
+addListenerToCamera(camera);
 
 showIntroduction();
 

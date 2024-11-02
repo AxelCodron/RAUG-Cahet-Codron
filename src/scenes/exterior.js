@@ -4,6 +4,7 @@ import * as THREE from 'three';
 
 import { loadNewRoom } from '../main';
 import { clearCode, useCode } from '../utils/digits-code';
+import { playCorpseNoise, playDoorSound, playLockedDoorSound, playPaperSound } from '../utils/sounds';
 
 // ------------------- Variables -------------------
 
@@ -85,18 +86,22 @@ function interact() {
     if (playerInDoorTriggerZone) {
         if (doorKeyFound) {
             hideDoorText();
+            playDoorSound();
             loadNewRoom("reception");
             playerInDoorTriggerZone = false;
         }
         else {
+            playLockedDoorSound();
             showDoorExam();
         }
     }
     if (playerInCorpseTriggerZone) {
+        playCorpseNoise();
         showCorpseExam();
     }
     if (playerInFileTriggerZone) {
         if (corpseTimeline.style.visibility === "hidden") {
+            playPaperSound();
             showFile();
             hideFileText();
         }
@@ -107,6 +112,7 @@ function interact() {
     }
     if (playerInReportTriggerZone) {
         if (report.style.visibility === "hidden") {
+            playPaperSound();
             showReport();
             hideReportText();
         }
@@ -117,6 +123,7 @@ function interact() {
     }
     if (playerInCharlesNoteTriggerZone) {
         if (charlesNote.style.visibility === "hidden") {
+            playPaperSound();
             showCharlesNote();
             hideCharlesNoteText();
         }
