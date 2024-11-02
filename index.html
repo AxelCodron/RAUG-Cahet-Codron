@@ -7,35 +7,6 @@
   <title>three_vite</title>
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="./src/main.css">
-
-  <!-- css style -->
-  <style>
-    /* Dialogue Container styles */
-    #dialogue-container {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      z-index: 10;
-    }
-
-    #character-image {
-      width: 150px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    #dialogue-box {
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      max-width: 300px;
-      margin: 10px auto 0;
-    }
-  </style>
 </head>
 
 <body>
@@ -46,6 +17,8 @@
     <div id="damage-overlay" class="damage-overlay"></div>
 
     <div id="loader" class="loader"></div>
+
+    <div id="blur" class="blur"></div>
 
     <!-- Intro text -->
     <div id="intro-text" class="intro-text">
@@ -73,14 +46,23 @@
     <div id ="gooddrawer-text" class="interact-text">
       Press E to open the center drawer
     </div>
-    <div id ="good-text" class="interact-text">
-      You received a note, a bottle and a magnetic card
+    <div id="items-container" style="display: none;" class="items-container">
+      <img id="itemsImage" src="assets/images/items.png" class="items-image" alt="Items Image">
+      <div id ="exit-prompt" class="exit-button">
+        Press E to exit.
+      </div>
+      <div id ="good-text" class="interact-text">
+        You received a note, a bottle and a magnetic card
+      </div>
     </div>
     <div id ="bad-text" class="interact-text">
       This drawer is locked
     </div>
     <div id ="searched-text" class="interact-text">
       The drawer is now empty
+    </div>
+    <div id ="noCard-text" class="interact-text">
+      It seems this door can be open with a magnetic card
     </div>
     <div id ="useCard-text" class="interact-text">
       Press E to use the magnetic card
@@ -101,18 +83,7 @@
       Are you OK ??? Do you want to die ?
     </div>
     <div id ="launchDialogue-text" class="interact-text">
-      Press E to talk to your brother.
-    </div>
-
-    <!-- Dialogue Overlay -->
-    <div id="dialogue-container" style="display: none;">
-      <!-- Character Image -->
-      <img id="character-image" src="assets/images/brother.png" alt="Character">
-
-      <!-- Dialogue Box -->
-      <div id="dialogue-box">
-          <p id="dialogue-text">Hello, adventurer! What brings you here?</p>
-      </div>
+      Press Enter to talk to your brother.
     </div>
 
     <!-- Four digits code -->
@@ -120,6 +91,28 @@
       <span>Enter the code</span>
       <span id="code-input" class="code-input"></span>
     </div>
+  </div>
+
+  <!-- Dialogue Overlay -->
+  <div id="dialogue-container" class="dialogue-container" style="display: none;">
+    <!-- Character Image -->
+    <img id="character-image" class="character-image" src="assets/images/brother.png" alt="Character">
+
+    <!-- Dialogue Box -->
+    <div class="dialogue-box">
+      <div id="dialogue-speaker" class="dialogue-speaker"></div>
+      <div id="dialogue-text" class="dialogue-text"></div>
+      <div class="enter-text">Enter</div>
+      <div id ="exit-prompt" class="exit-button">
+        Press E to exit.
+      </div>
+  </div>
+    </div>
+  </div>
+
+    <!-- black background for Pause -->
+  <div id="pause-overlay" class="pause-overlay" style="display: none;">
+    <div id="pause-text" class="intro-text"></div>
   </div>
   <script type="module" src="./src/main.js"></script>
 </body>

@@ -8,13 +8,18 @@ import { loadNewRoom } from '../main';
 
 const drawer1Text = document.getElementById('drawer1-text');
 const drawer2Text = document.getElementById('drawer2-text');
+
 const goodDrawerText = document.getElementById('gooddrawer-text');
+const itemsContainer = document.getElementById('items-container');
+const blurred = document.getElementById('blur');
+
 
 const badText = document.getElementById('bad-text');
 const goodText = document.getElementById('good-text');
 const searchedText = document.getElementById('searched-text');
 
 const useCardText = document.getElementById('useCard-text');
+const noCardText = document.getElementById('noCard-text');
 const dontOpenText = document.getElementById('dontOpen-text');
 const openText = document.getElementById('Open-text');
 
@@ -40,18 +45,20 @@ function showMessage() {
     if (playerInGoodDrawerTriggerZone & !itemsOn) {
         hideText(goodDrawerText);
         animateDrawer = true;
-        displayText(goodText);
-        itemsOn = true;
     }
     else if (playerInGoodDrawerTriggerZone & itemsOn & goodText.style.visibility == "hidden") {
         hideText(goodDrawerText);
         displayText(searchedText);
     }
-    if (playerInRightDoorTriggerZone){
+    else if (playerInGoodDrawerTriggerZone & itemsOn & itemsContainer.style.display == 'flex') {
+        hideText(searchedText);
+        hideMessage();
+    }
+    if (playerInRightDoorTriggerZone & itemsOn){
         hideText(useCardText);
         displayText(dontOpenText);
     }
-    if (playerInLeftDoorTriggerZone){
+    if (playerInLeftDoorTriggerZone & itemsOn){
         hideText(useCardText);
         leftDoorOpen = true;
     }
@@ -61,8 +68,12 @@ function hideMessage() {
         hideText(badText);
     }
     if (playerInGoodDrawerTriggerZone) {
-        hideText(goodText);
         hideText(searchedText);
+        hideText(goodText);
+        hideText(goodDrawerText);
+        itemsContainer.style.display = 'none';
+        blurred.style.display = 'none';
+
     }
     if (playerInRightDoorTriggerZone){
         hideText(dontOpenText);
@@ -135,7 +146,10 @@ function intersectobject(playerBox, Trigger, inTrigger, text)
         if (inTrigger) {
             console.log("Exited the trigger zone");
             hideText(text);
-            hideMessage(text);
+            hideMessage();
+            if (playerInGoodDrawerTriggerZone & itemsOn & itemsContainer.style.display == 'flex') {
+                return true;
+            }
             return false;
         }
     }
@@ -166,12 +180,25 @@ function receptionTriggers(playerBox) {
     playerInDrawer1TriggerZone = intersectobject(playerBox, drawer1Trigger, playerInDrawer1TriggerZone, drawer1Text)
     playerInDrawer2TriggerZone = intersectobject(playerBox, drawer2Trigger, playerInDrawer2TriggerZone, drawer2Text)
     playerInGoodDrawerTriggerZone = intersectobject(playerBox, goodDrawerTrigger, playerInGoodDrawerTriggerZone, goodDrawerText)
-    playerInRightDoorTriggerZone = intersectobject(playerBox, rightDoorTrigger, playerInRightDoorTriggerZone, useCardText)
-    playerInLeftDoorTriggerZone = intersectobject(playerBox, leftDoorTrigger, playerInLeftDoorTriggerZone, useCardText)
+    if (itemsOn) {
+        playerInRightDoorTriggerZone = intersectobject(playerBox, rightDoorTrigger, playerInRightDoorTriggerZone, useCardText)
+        playerInLeftDoorTriggerZone = intersectobject(playerBox, leftDoorTrigger, playerInLeftDoorTriggerZone, useCardText)
+    }
+    else {
+        playerInRightDoorTriggerZone = intersectobject(playerBox, rightDoorTrigger, playerInRightDoorTriggerZone, noCardText)
+        playerInLeftDoorTriggerZone = intersectobject(playerBox, leftDoorTrigger, playerInLeftDoorTriggerZone, noCardText)
+    }
 
     if (animateDrawer) {
         if (model.position.z > -0.9){
             model.position.z -= 0.01;
+        }
+        else {
+            displayText(goodText)
+            itemsContainer.style.display = 'flex';
+            blurred.style.display = 'block';
+            itemsOn = true;
+            animateDrawer = false
         }
     }
 
