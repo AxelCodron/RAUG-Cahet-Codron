@@ -5,12 +5,13 @@ import glsl from 'vite-plugin-glsl';
 export default defineConfig({
     clearScreen: false,
     base: '/RAUG-Cahet-Codron/',
-    
+
     build: {
         sourcemap: true,
         outDir: 'dist',
         assetsDir: 'assets',
         minify: 'esbuild',
+        chunkSizeWarningLimit: 1000,
         rollupOptions: {
             output: {
                 manualChunks: (id) => {
