@@ -96,6 +96,39 @@ document.body.addEventListener('mousemove', (event) => {
 document.addEventListener('keyup', (event) => {
   if (event.code === 'KeyE') {
     interact();
+    if (currentRoom === 'reception') {
+      showMessage();
+    }
+    if (currentRoom === 'corridor') {
+      showCorridorMessage();
+    }
+    if (currentRoom === 'room') {
+      exitDialogue();
+    }
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyY') {
+    if (currentRoom === 'room') {
+      finalDialogue(true);
+    }
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyN') {
+    if (currentRoom === 'room') {
+      finalDialogue(false);
+    }
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'Space') {
+    if (currentRoom === 'room') {
+      brotherDialogue();
+    }
   }
 });
 
@@ -205,39 +238,6 @@ function controls(deltaTime) {
       if (keyStates['Space']) {
         playerVelocity.y = 15;
       }
-    }
-  }
-
-  // Objects interaction
-  if (keyStates['KeyE']) {
-    showHUD();
-    if (currentRoom === 'reception') {
-      showMessage();
-    }
-    if (currentRoom === 'corridor') {
-      showCorridorMessage();
-    }
-    if (currentRoom === 'room'){
-      exitDialogue();
-    }
-  }
-
-  if (keyStates['Enter']) {
-    if (currentRoom === 'room'){
-      if (keyPressed['Enter']) {
-        brotherDialogue();
-        keyPressed['Enter'] = false; // Prevent repeated calls
-      }
-    }
-  }
-  if (keyStates['KeyO']) {
-    if (currentRoom === 'room'){
-      finalDialogue("O");
-    }
-  }
-  if (keyStates['KeyN']) {
-    if (currentRoom === 'room'){
-      finalDialogue("N");
     }
   }
 }
