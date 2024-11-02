@@ -1,6 +1,7 @@
 // File for the infected model
 
 import * as THREE from 'three';
+import { addSoundToInfected, playInfectedSound } from '../utils/sounds';
 
 let model, mixer;
 
@@ -14,9 +15,14 @@ function loadIdleInfected(infectedFile, loader, scene, position = new THREE.Vect
         model = gltf.scene;
 
         model.scale.set(0.6, 0.6, 0.6);
-        // temporary manual positioning
+
+        // Manual positioning
         model.position.set(position.x, position.y, position.z)
         model.rotation.set(rotation.x, rotation.y, rotation.z)
+
+        // Sound for the infected
+        addSoundToInfected(model);
+        playInfectedSound();
         
         scene.add(model);
 

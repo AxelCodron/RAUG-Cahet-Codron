@@ -11,7 +11,7 @@ import { idleInfectedLoop, loadIdleInfected } from './entities/idle-infected.js'
 import { hideIntroduction, showIntroduction, waitForAnyKey } from './scenes/intro.js';
 import { loadDrawer, receptionTriggers, showMessage } from './scenes/reception.js';
 import { corridorTriggers, showCorridorMessage } from './scenes/corridor.js';
-import { addListenerToCamera, pauseFootsteps, playExteriorBackgroundMusic, playFootsteps, stopBackgroundMusic } from './utils/sounds.js';
+import { addListenerToCamera, pauseFootsteps, playExteriorBackgroundMusic, playFootsteps, playMeetingBrotherMusic, stopBackgroundMusic } from './utils/sounds.js';
 import { roomTriggers, brotherDialogue, exitDialogue, finalDialogue } from './scenes/room.js';
 
 // -------------------------------- Base setup --------------------------------
@@ -346,7 +346,7 @@ function loadRoom(roomFile) {
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
 
-      // Call the functions from reception.js
+      // Call the functions from corridor.js
       loadIdleInfected('idle-infected.glb', loader, scene, new THREE.Vector3(-2, 0, 3.5), new THREE.Vector3(0, 180, 0));
     }
     else if (roomFile === 'room.glb') {
@@ -355,6 +355,9 @@ function loadRoom(roomFile) {
       camera.rotation.set(0, Math.PI, 0);
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
+
+      // Call the functions from room.js
+      playMeetingBrotherMusic();
     }
   },
     (progress) => {

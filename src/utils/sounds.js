@@ -16,6 +16,13 @@ audioLoader.load('assets/sounds/abadoned-pyramid-atmo-orchestral-and-drone-sad-m
     exteriorBackgroundMusic.setVolume(0.1);
 });
 
+const meetingBrotherMusic = new THREE.Audio(listener);
+audioLoader.load('assets/sounds/a-rainy-day-248712.mp3', (buffer) => {
+    meetingBrotherMusic.setBuffer(buffer);
+    meetingBrotherMusic.setLoop(true);
+    meetingBrotherMusic.setVolume(0.2);
+});
+
 // Sound effects
 const scaryViolins = new THREE.Audio(listener);
 audioLoader.load('assets/sounds/scaryviolins-6829.mp3', (buffer) => {
@@ -110,9 +117,18 @@ function playExteriorBackgroundMusic() {
     exteriorBackgroundMusic.play();
 }
 
+function playMeetingBrotherMusic() {
+    meetingBrotherMusic.play();
+}
+
+function playInfectedSound() {
+    infectedSound.play();
+}
+
 function stopBackgroundMusic() {
     exteriorBackgroundMusic.stop();
-    // TODO: Add other background music stop here
+    meetingBrotherMusic.stop();
+    infectedSound.stop();
 }
 
 function playBiteSound() {
@@ -167,5 +183,5 @@ export {
     addListenerToCamera, playExteriorBackgroundMusic, stopBackgroundMusic,
     playInfectedChase, stopInfectedChase, playBiteSound, addSoundToInfected, playPaperSound,
     playDoorSound, playLockedDoorSound, playCorpseNoise, playFootsteps, pauseFootsteps,
-    addSoundToLamp
+    addSoundToLamp, playMeetingBrotherMusic, playInfectedSound
 };

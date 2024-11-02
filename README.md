@@ -61,6 +61,8 @@ Brother: https://skfb.ly/oQnnK
 ## Musics
 Background exterior music by szegvaria from Pixabay:
 https://pixabay.com/fr/users/szegvaria-9048476/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=9237
+Meeting your brother music by Tomomi Kato from Pixabay:
+https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=248712
 
 ## Sound effects
 Bite scare effect by Pixabay:

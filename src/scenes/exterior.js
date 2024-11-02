@@ -9,7 +9,7 @@ import { addSoundToLamp, playCorpseNoise, playDoorSound, playLockedDoorSound, pl
 // ------------------- Variables -------------------
 
 // Flag to track if the door key has been found
-let doorKeyFound = false;
+let doorKeyFound = true;
 
 // Flags to track if player is inside the trigger
 let playerInDoorTriggerZone = false;
