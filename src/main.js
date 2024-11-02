@@ -248,120 +248,138 @@ function checkTriggers() {
 }
 
 function loadRoom(roomFile) {
-  // Show loader before starting the model load
-  console.log('Loading room:', roomFile);
-  blackScreenElement.style.visibility = 'visible';
-  loaderElement.style.visibility = 'visible';
-
-  loader.load(roomFile, (gltf) => {
+  return new Promise((resolve, reject) => {
+    console.log('Loading room:', roomFile);
+    blackScreenElement.style.visibility = 'visible';
+    loaderElement.style.visibility = 'visible';
     isLoading = true;
 
-    // Clear the current scene
-    removeInfected();
-    scene.clear();
-    worldOctree.clear()
+    // Disable player physics/controls while loading
+    playerOnFloor = true;  // Prevent initial falling
+    playerVelocity.y = 0;  // Reset vertical velocity
 
-    scene.add(gltf.scene);
+    loader.load(
+      roomFile,
+      (gltf) => {
+        try {
+          // Clear the current scene
+          removeInfected();
+          scene.clear();
+          worldOctree.clear();
 
-    scene.add(playerLight);
+          // Add scene elements
+          scene.add(gltf.scene);
+          scene.add(playerLight);
 
-    worldOctree.fromGraphNode(gltf.scene);
+          // Process meshes first
+          gltf.scene.traverse(child => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              if (child.material.map) {
+                child.material.map.anisotropy = 4;
+              }
+            }
+          });
 
-    gltf.scene.traverse(child => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+          // Process octree with a small delay to ensure scene is ready
+          setTimeout(() => {
+            console.log('Computing octree...');
+            worldOctree.fromGraphNode(gltf.scene);
 
-        if (child.material.map) {
-          child.material.map.anisotropy = 4;
+            // Setup room-specific elements after octree is ready
+            setupRoomSpecifics(roomFile);
+
+            // Give a small additional delay for the octree to finish internal computations
+            setTimeout(() => {
+              console.log('Room fully loaded and collision ready');
+              loaderElement.style.visibility = 'hidden';
+              blackScreenElement.style.visibility = 'hidden';
+              isLoading = false;
+              loadingBar.style.width = '0%';
+
+              // Ensure player is properly positioned before enabling physics
+              playerCollider.start.copy(camera.position).y -= 0.35;
+              playerCollider.end.copy(camera.position).y += 0.35;
+              playerOnFloor = false;  // Reset this to allow proper physics
+
+              resolve();
+            }, 100);  // Small delay for octree completion
+          }, 50);  // Small delay before starting octree computation
+
+        } catch (error) {
+          console.error('Error processing room:', error);
+          reject(error);
         }
+      },
+      (progress) => {
+        const percentComplete = Math.round((progress.loaded / progress.total) * 100);
+        loadingBar.style.width = percentComplete + '%';
+        console.log(percentComplete + '%');
+      },
+      (error) => {
+        console.error('An error occurred while loading the model:', error);
+        loaderElement.style.visibility = 'hidden';
+        blackScreenElement.style.visibility = 'hidden';
+        reject(error);
       }
-    });
+    );
+  });
+}
 
-    // Hide the loader once the model is fully loaded
-    setTimeout(() => {
-      loaderElement.style.visibility = 'hidden';
-      blackScreenElement.style.visibility = 'hidden';
-      isLoading = false;
+// Helper function to handle room-specific setup (unchanged)
+function setupRoomSpecifics(roomFile) {
+  stopBackgroundMusic();
 
-      loadingBar.style.width = '0%';
-    }, 3000);
-
-    // Stop the background music
-    stopBackgroundMusic();
-
-    // Reset player position
-    if (roomFile == 'exterior.glb') {
+  switch (roomFile) {
+    case 'exterior.glb':
       playerCollider.start.set(0, 0.35, 0);
       playerCollider.end.set(0, 1, 0);
       camera.position.copy(playerCollider.end);
       camera.rotation.set(0, 0, 0);
-
-      // Call the functions for exterior.js
       playExteriorBackgroundMusic();
       loadNeonLight(scene);
-    }
-    else if (roomFile === 'reception.glb') {
+      break;
+
+    case 'reception.glb':
       if (precedentRoom === 'exterior') {
         playerCollider.start.set(5, 0.675, 3);
         playerCollider.end.set(5, 1.325, 3);
         camera.rotation.set(0, 0, 0);
-      }
-      else {
+      } else {
         playerCollider.start.set(-4.7, 0.675, -3.5);
         playerCollider.end.set(-4.7, 1.325, -3.5);
         camera.rotation.set(0, Math.PI, 0);
       }
-
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
-
-      // Call the functions for reception.js
       loadDrawer('drawer.glb', loader, scene);
-    }
-    else if (roomFile === 'corridor.glb') {
+      break;
+
+    case 'corridor.glb':
       if (precedentRoom === 'reception') {
         playerCollider.start.set(2.2, 0.675, -15);
         playerCollider.end.set(2.2, 1.325, -15);
         camera.rotation.set(0, Math.PI, 0);
-      }
-      else {
+      } else {
         playerCollider.start.set(2, 0.675, 8);
         playerCollider.end.set(2, 1.325, 8);
         camera.rotation.set(0, 0, 0);
       }
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
-
-      // Call the functions from corridor.js
       loadIdleInfected('idle-infected.glb', loader, scene, new THREE.Vector3(-2, 0, 3.5), new THREE.Vector3(0, 180, 0));
-    }
-    else if (roomFile === 'room.glb') {
+      break;
+
+    case 'room.glb':
       playerCollider.start.set(0, 1.5, -2.6);
       playerCollider.end.set(0, 2.15, -2.6);
       camera.rotation.set(0, Math.PI, 0);
       camera.position.copy(playerCollider.end);
       playerLight.position.copy(playerCollider.end);
-
-      // Call the functions from room.js
       playMeetingBrotherMusic();
-    }
-  },
-    (progress) => {
-      // Update progress bar
-      const percentComplete = Math.round((progress.loaded / progress.total) * 100);
-
-      loadingBar.style.width = percentComplete + '%';
-
-      console.log(percentComplete + '%');
-    },
-    (error) => {
-      // Handle errors in loading
-      console.error('An error occurred while loading the model:', error);
-      loaderElement.style.visibility = 'hidden';
-      blackScreenElement.style.visibility = 'hidden';
-    }
-  );
+      break;
+  }
 }
 
 function loadNewRoom(roomName) {
