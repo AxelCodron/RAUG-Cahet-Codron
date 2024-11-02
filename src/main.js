@@ -201,12 +201,12 @@ function controls(deltaTime) {
 
   // for reception
   if (keyStates['KeyO']) {
-  if (playerOnFloor) {
-    if (keyStates['Space']) {
-      playerVelocity.y = 15;
+    if (playerOnFloor) {
+      if (keyStates['Space']) {
+        playerVelocity.y = 15;
+      }
     }
   }
-  
 
   // Objects interaction
   if (keyStates['KeyE']) {
