@@ -4,7 +4,7 @@ import * as THREE from 'three';
 
 import { loadNewRoom } from '../main';
 import { clearCode, useCode } from '../utils/digits-code';
-import { playCorpseNoise, playDoorSound, playLockedDoorSound, playPaperSound } from '../utils/sounds';
+import { addSoundToLamp, playCorpseNoise, playDoorSound, playLockedDoorSound, playPaperSound } from '../utils/sounds';
 
 // ------------------- Variables -------------------
 
@@ -357,6 +357,9 @@ const neonLight = new THREE.PointLight(0xffffff, 20)
 neonLight.position.set(-8, 2.4, -60)
 
 function loadNeonLight(scene) {
+    // Add sound effect
+    addSoundToLamp(neonLight);
+    
     scene.add(neonLight)
 }
 

@@ -1,11 +1,44 @@
 # Authors
-Enora Cahet,
-Axel Codron
+Enora Cahet: Interior gameplay and design.
+Axel Codron: Base setup, exterior gameplay and design.
 
 # Plot
+**⚠️ Even if the graphics are simple, this is a horror themed game ⚠️**
+You arrive at an hospital looking for your little brother who didn't come back. However, you found no one there, except for strange creatures...
+
+# Controls
+Use ZQSD or WASD to move, E to interact, and enter to progress in dialogues.
 
 # Copyrights
-## Assets
+This game is based from the "fps" example of the three.js official website by mrdoob:
+https://threejs.org/examples/?q=fps#games_fps
+
+## Fonts
+ZOMBIE font by Patrick Broderick.
+
+## Images
+Produced by the authors of this project: Enora Cahet and Axel Codron.
+
+## Models
+All used models are from Sketchfab.
+
+### Exterior
+Hospital exterior: https://skfb.ly/oKpXu
+Lampost: https://skfb.ly/oVt6A
+Ceiling lamp: https://skfb.ly/ouOVD
+Corpse: https://skfb.ly/ooAnK
+Paper: https://skfb.ly/6WOZU
+Post it: https://skfb.ly/oFrKV
+Infected (moving): https://skfb.ly/6BKSF
+Locker: https://skfb.ly/6xGqV
+Tablet folder: https://skfb.ly/6Sw8z
+
+### Reception
+TODO
+
+### Corridor
+Infected (idle): https://skfb.ly/oDLzO
+TODO
 
 ## Musics
 Background exterior music by szegvaria from Pixabay:
@@ -32,3 +65,5 @@ Bag noise by Pixabay:
 https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=95101
 Footsteps by Pixabay:
 https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=39202
+Lamp noise by Pixabay:
+https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=17625

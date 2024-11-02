@@ -31,14 +31,6 @@ audioLoader.load('assets/sounds/shepard-effect-edit.mp3', (buffer) => {
     shepardTone.setVolume(0.6);
 });
 
-const infectedSound = new THREE.PositionalAudio(listener);
-audioLoader.load('assets/sounds/zombie-1-22336.mp3', (buffer) => {
-    infectedSound.setBuffer(buffer);
-    infectedSound.setLoop(true);
-    infectedSound.setRefDistance(20);
-    infectedSound.setVolume(0.3);
-});
-
 const biteScarySound = new THREE.Audio(listener);
 audioLoader.load('assets/sounds/cringe-scare-47561.mp3', (buffer) => {
     biteScarySound.setBuffer(buffer);
@@ -82,6 +74,23 @@ audioLoader.load('assets/sounds/footsteps.mp3', (buffer) => {
     footsteps.setLoop(true);
 });
 
+// Positionnal sound effects
+const infectedSound = new THREE.PositionalAudio(listener);
+audioLoader.load('assets/sounds/zombie-1-22336.mp3', (buffer) => {
+    infectedSound.setBuffer(buffer);
+    infectedSound.setLoop(true);
+    infectedSound.setRefDistance(20);
+    infectedSound.setVolume(0.3);
+});
+
+const lampSound = new THREE.PositionalAudio(listener);
+audioLoader.load('assets/sounds/fluorescent-lamp-flickering-17625.mp3', (buffer) => {
+    lampSound.setBuffer(buffer);
+    lampSound.setRefDistance(3);
+    lampSound.setVolume(0.9);
+    lampSound.setLoop(true);
+});
+
 // ------------------- Functions -------------------
 
 function addListenerToCamera(camera) {
@@ -90,6 +99,11 @@ function addListenerToCamera(camera) {
 
 function addSoundToInfected(infected) {
     infected.add(infectedSound);
+}
+
+function addSoundToLamp(lamp) {
+    lamp.add(lampSound);
+    lampSound.play();
 }
 
 function playExteriorBackgroundMusic() {
@@ -152,5 +166,6 @@ function pauseFootsteps() {
 export {
     addListenerToCamera, playExteriorBackgroundMusic, stopBackgroundMusic,
     playInfectedChase, stopInfectedChase, playBiteSound, addSoundToInfected, playPaperSound,
-    playDoorSound, playLockedDoorSound, playCorpseNoise, playFootsteps, pauseFootsteps
+    playDoorSound, playLockedDoorSound, playCorpseNoise, playFootsteps, pauseFootsteps,
+    addSoundToLamp
 };
