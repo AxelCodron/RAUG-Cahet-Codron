@@ -44,6 +44,7 @@ Post it: https://skfb.ly/oFrKV
 Infected (moving): https://skfb.ly/6BKSF
 Locker: https://skfb.ly/6xGqV
 Tablet folder: https://skfb.ly/6Sw8z
+Rust panel: https://skfb.ly/6WttJ
 
 ### Reception
 Reception: https://skfb.ly/oG98U

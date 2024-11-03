@@ -51,7 +51,7 @@ const dialogues = [
     { speaker: "Brother", text: "No, you should! You have better chances of survival." },
     { speaker: "You", text: "But you were here for so long waiting to escape..." },
     { speaker: "Brother", text: "Take it." },
-    { speaker: "Pause", text: "Make a choice\nPress Y to save your Brother. Press N to save yourselve." }
+    { speaker: "Pause", text: "Make a choice\nPress Y to save your Brother. Press N to save yourself." }
 ];
 
 const selfish = [

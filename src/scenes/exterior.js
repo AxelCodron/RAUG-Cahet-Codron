@@ -46,8 +46,8 @@ const fileTrigger = new THREE.Box3(
 
 // Report trigger
 const reportTrigger = new THREE.Box3(
-    new THREE.Vector3(-8, 0, -10),
-    new THREE.Vector3(-5, 3, -7.5)
+    new THREE.Vector3(-5.3, 0, -10),
+    new THREE.Vector3(-3, 3, -7.5)
 );
 
 // Charles note trigger
